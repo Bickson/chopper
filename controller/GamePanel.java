@@ -8,15 +8,43 @@ import javax.swing.*;
 
 import model.*;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements ActionListener{
 	
-	private Stage level1 = new Stage(); 
+	private Stage level1 = new Stage();
+	private Timer timer;
 	
 	public GamePanel() {
 		this.setBackground(Color.blue);
 		this.addKeyListener(new keyHandler());
 		this.setFocusable(true);
 		
+	}
+	
+	public void startAnimation() {
+		timer = new Timer(10, this);
+		timer.start();
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		Obstacle obstacle = this.level1.getObstacles();
+		obstacle.addToX(-1);
+		repaint();
+		
+		/*for(Obsticle obs: obsticles) {
+			obs.move();
+			if(obs.getX() <= 0){
+				this.addAndRemoveObs(obs);
+				break;
+			}
+			
+			if(checkCollition(obs)) {
+				System.out.println("COLLITION!");
+				System.exit(0);
+				//Toolkit.getDefaultToolkit().beep();
+				//JOptionPane.showMessageDialog(this, "U suck");
+			}
+			repaint();
+		}*/
 	}
 	
 	public JMenuBar createMenu() {
@@ -55,6 +83,9 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g);
 		Chopper chopper = this.level1.getChopper();
 		chopper.getImage().paintIcon(this,g,chopper.getX(),chopper.getY());
+		
+		Obstacle obstacle = this.level1.getObstacles();
+		g.fillOval(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
 	}
 	
 	private class keyHandler implements KeyListener {

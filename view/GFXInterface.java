@@ -16,6 +16,8 @@ public class GFXInterface {
 		GamePanel panel = new GamePanel();
 		
 		frame.add(panel);
+		panel.startAnimation();
+		
 		JMenuBar menu = panel.createMenu();
 		frame.setJMenuBar(menu);
 		
