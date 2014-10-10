@@ -2,8 +2,7 @@ package controller;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -15,6 +14,8 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel() {
 		this.setBackground(Color.blue);
+		this.addKeyListener(new keyHandler());
+		this.setFocusable(true);
 		
 	}
 	
@@ -54,6 +55,46 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g);
 		Chopper chopper = this.level1.getChopper();
 		chopper.getImage().paintIcon(this,g,chopper.getX(),chopper.getY());
+	}
+	
+	private class keyHandler implements KeyListener {
+		
+		public void keyTyped(KeyEvent ke) {
+			System.out.println("Key typed   : " + 
+				ke.getKeyChar() + ", " + ke.getKeyCode());
+		}
+		
+		public void keyPressed(KeyEvent ke) {
+			System.out.println("Key pressed : " + 
+				ke.getKeyChar() + ", " + ke.getKeyCode());
+			Chopper chopper = GamePanel.this.level1.getChopper();
+			
+			if(ke.getKeyCode() == KeyEvent.VK_DOWN){
+				chopper.addToY(5);
+				GamePanel.this.repaint();
+				//Ship.this.y += 5;
+				//Ship.this.repaint();
+			}
+			if(ke.getKeyCode() == KeyEvent.VK_UP){
+				chopper.addToY(-5);
+				GamePanel.this.repaint();
+				//Ship.this.y -= 5;
+				//Ship.this.repaint();
+			}
+			if(ke.getKeyCode() == KeyEvent.VK_RIGHT){
+				//Ship.this.x += 5;
+				//Ship.this.repaint();
+			}
+			if(ke.getKeyCode() == KeyEvent.VK_LEFT){
+				//Ship.this.x -= 5;
+				//Ship.this.repaint();
+			}
+		}
+		
+		public void keyReleased(KeyEvent ke) {
+			System.out.println("Key released: " + 
+				ke.getKeyChar() + ", " + ke.getKeyCode());
+		}
 	}
 	
 }

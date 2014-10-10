@@ -8,7 +8,7 @@ public class Chopper {
 	private int height,width,x,y;
 	
 	public Chopper() {
-		
+		y = 100;
 	}
 	
 	public ImageIcon getImage() {
@@ -29,5 +29,9 @@ public class Chopper {
 	
 	public int getWidth() {
 		return width;
+	}
+	
+	public void addToY(int i) {
+		this.y += i;
 	}
 }
