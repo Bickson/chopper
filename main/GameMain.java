@@ -2,7 +2,7 @@ package main;
 
 import view.*;
 
-public class Chopper {
+public class GameMain {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub super bra
