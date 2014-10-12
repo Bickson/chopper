@@ -47,7 +47,8 @@ public class Background extends Thread {
 		
 		// END TEST
 		
-		
+		//only update every two frames:
+		index = index / 2;
 		//on the fly loading
 		if(index >= howManyImagesToLoad){
 			index = (index % howManyImagesToLoad) +1 ;

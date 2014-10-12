@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 public class Obstacle {
 	
-	// ImageIcon image = new ImageIcon("//PATH");
+	ImageIcon image;
 	int x,y,width,height;
 	
 	public Obstacle (int x, int y, int width, int height) {
@@ -20,6 +20,10 @@ public class Obstacle {
 	public ImageIcon getImage() {
 		return image;
 	}*/
+	
+	public ImageIcon getImage(int index){
+		return image;
+	}
 	
 	public int getX() {
 		return x;

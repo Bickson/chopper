@@ -7,6 +7,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import model.*;
+//import model.Chopper;
+
 
 public class GamePanel extends JPanel implements ActionListener{
 	
@@ -25,13 +27,13 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 	
 	public void startAnimation() {
-		timer = new Timer(40, this);
+		timer = new Timer(20, this);
 		timer.start();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		Obstacle obstacle = this.level1.getObstacles();
-		obstacle.addToX(-1);
+		//Obstacle obstacle = this.level1.getObstacles();
+		//obstacle.addToX(-1);
 		repaint();
 		
 		/*for(Obsticle obs: obsticles) {
@@ -96,10 +98,26 @@ public class GamePanel extends JPanel implements ActionListener{
 		Chopper chopper = this.level1.getChopper();
 		chopper.getImage(frameNumber).paintIcon(this,g,chopper.getX(),chopper.getY());
 		
-		Obstacle obstacle = this.level1.getObstacles();
-		g.fillOval(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
+		
+		//Paint all obstacles
+		for(int i=0; i<level1.getSizeOfObstacles(); i++){
+			Obstacle obstacle = level1.getObstacles(i);
+			obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.getX(),obstacle.getY());
+		}
+		//Obstacle obstacle = this.level1.getObstacles();
+		//g.fillOval(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
+		
+		
+		
+		
+		
 		frameNumber++;
 	}
+	
+	public Stage getStage(){
+		return level1;
+	}
+	
 	
 	private class keyHandler implements KeyListener {
 		
