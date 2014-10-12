@@ -90,14 +90,15 @@ public class GamePanel extends JPanel implements ActionListener{
 		
 		imageBG = background.getBG(frameNumber);
 		imageBG.paintIcon(this, g, 0, 0);
-		frameNumber++;
+		
 		
 		//Paint Chopper
 		Chopper chopper = this.level1.getChopper();
-		chopper.getImage().paintIcon(this,g,chopper.getX(),chopper.getY());
+		chopper.getImage(frameNumber).paintIcon(this,g,chopper.getX(),chopper.getY());
 		
 		Obstacle obstacle = this.level1.getObstacles();
 		g.fillOval(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
+		frameNumber++;
 	}
 	
 	private class keyHandler implements KeyListener {
