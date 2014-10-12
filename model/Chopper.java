@@ -4,7 +4,8 @@ import javax.swing.ImageIcon;
 
 public class Chopper {
 	
-	private ImageIcon image = new ImageIcon("gfx/Image001.png");
+	//private ImageIcon image = new ImageIcon("gfx/Image001.png");
+	private ImageIcon image = new ImageIcon("gfx/heliAlpha.png");
 	private int height,width,x,y;
 	
 	public Chopper() {

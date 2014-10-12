@@ -12,16 +12,20 @@ public class GamePanel extends JPanel implements ActionListener{
 	
 	private Stage level1 = new Stage();
 	private Timer timer;
+	private Background background = new Background();
+	private ImageIcon imageBG;
+	private int frameNumber;
+	
 	
 	public GamePanel() {
 		this.setBackground(Color.blue);
 		this.addKeyListener(new keyHandler());
 		this.setFocusable(true);
-		
+		frameNumber = 1;
 	}
 	
 	public void startAnimation() {
-		timer = new Timer(10, this);
+		timer = new Timer(40, this);
 		timer.start();
 	}
 	
@@ -81,6 +85,14 @@ public class GamePanel extends JPanel implements ActionListener{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		//Paint Background
+		//Background
+		
+		imageBG = background.getBG(frameNumber);
+		imageBG.paintIcon(this, g, 0, 0);
+		frameNumber++;
+		
+		//Paint Chopper
 		Chopper chopper = this.level1.getChopper();
 		chopper.getImage().paintIcon(this,g,chopper.getX(),chopper.getY());
 		
@@ -102,13 +114,13 @@ public class GamePanel extends JPanel implements ActionListener{
 			
 			if(ke.getKeyCode() == KeyEvent.VK_DOWN){
 				chopper.addToY(5);
-				GamePanel.this.repaint();
+				//GamePanel.this.repaint();
 				//Ship.this.y += 5;
 				//Ship.this.repaint();
 			}
 			if(ke.getKeyCode() == KeyEvent.VK_UP){
 				chopper.addToY(-5);
-				GamePanel.this.repaint();
+				//GamePanel.this.repaint();
 				//Ship.this.y -= 5;
 				//Ship.this.repaint();
 			}

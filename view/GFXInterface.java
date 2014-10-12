@@ -21,7 +21,7 @@ public class GFXInterface {
 		JMenuBar menu = panel.createMenu();
 		frame.setJMenuBar(menu);
 		
-		frame.setSize(600,300);
+		frame.setSize(1024,680);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
