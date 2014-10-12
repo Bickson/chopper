@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 public class Background extends Thread {
 	private ArrayList<ImageIcon> bgImage = new ArrayList<ImageIcon>();
-	private int howManyImagesToLoad = 225;
+	private int howManyImagesToLoad = 300;
 	private String tempImagePath;
 	
 	public Background(){

@@ -6,9 +6,9 @@ import javax.swing.ImageIcon;
 
 public class Obstacle {
 	
-	ImageIcon image;
-	int x,y,width,height;
-	
+	protected ImageIcon image;
+	protected int x,y,width,height;
+	protected Shot shot;
 	public Obstacle (int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
@@ -25,11 +25,18 @@ public class Obstacle {
 		return image;
 	}
 	
-	public int getX() {
+	public int moveX(int index) {
 		return x;
 	}
 	
-	public int getY() {
+	public int moveY(int index) {
+		return y;
+	}
+	public int getX(int index) {
+		return x;
+	}
+	
+	public int getY(int index) {
 		return y;
 	}
 	
@@ -49,4 +56,10 @@ public class Obstacle {
 		this.y += i;
 	}
 	
+	public Shot getShot(){
+		if(shot != null){
+			return shot;
+		}
+		return null;
+	}
 }

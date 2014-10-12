@@ -102,8 +102,20 @@ public class GamePanel extends JPanel implements ActionListener{
 		//Paint all obstacles
 		for(int i=0; i<level1.getSizeOfObstacles(); i++){
 			Obstacle obstacle = level1.getObstacles(i);
-			obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.getX(),obstacle.getY());
+			obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.moveX(frameNumber),obstacle.moveY(frameNumber));
 		}
+		
+		//Paint any shots fired
+		for(int i=0; i<level1.getSizeOfObstacles(); i++){
+			Shot shot = level1.getObstacles(i).getShot();
+			//Shot shot = obstacle.getShot();
+			if(shot != null ){
+				//System.out.println("DEBUG: drawing shot!!");
+				shot.getImage(frameNumber).paintIcon(this,g,shot.moveX(frameNumber),shot.moveY(frameNumber));
+			}
+			//obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.getX(),obstacle.getY(frameNumber));
+		}
+		
 		//Obstacle obstacle = this.level1.getObstacles();
 		//g.fillOval(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
 		
@@ -127,8 +139,8 @@ public class GamePanel extends JPanel implements ActionListener{
 		}
 		
 		public void keyPressed(KeyEvent ke) {
-			System.out.println("Key pressed : " + 
-				ke.getKeyChar() + ", " + ke.getKeyCode());
+			//System.out.println("Key pressed : " + 
+			//	ke.getKeyChar() + ", " + ke.getKeyCode());
 			Chopper chopper = GamePanel.this.level1.getChopper();
 			
 			if(ke.getKeyCode() == KeyEvent.VK_DOWN){
@@ -154,8 +166,8 @@ public class GamePanel extends JPanel implements ActionListener{
 		}
 		
 		public void keyReleased(KeyEvent ke) {
-			System.out.println("Key released: " + 
-				ke.getKeyChar() + ", " + ke.getKeyCode());
+			//System.out.println("Key released: " + 
+			//	ke.getKeyChar() + ", " + ke.getKeyCode());
 		}
 	}
 	
