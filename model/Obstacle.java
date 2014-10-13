@@ -40,6 +40,15 @@ public class Obstacle {
 		return y;
 	}
 	
+	// Overload
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
 	public int getHeight() {
 		return height;
 	}

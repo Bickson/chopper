@@ -12,6 +12,7 @@ public class Chopper {
 	private String tempImagePath;
 	//= new ImageIcon("gfx/heliAlpha1.png");
 	private int height,width,x,y;
+	private ArrayList<Shot> shots = new ArrayList<Shot>();
 	
 	public Chopper() {
 		y = 100;
@@ -56,5 +57,19 @@ public class Chopper {
 			images.add(new ImageIcon(tempImagePath));
 		}
 		
+	}
+	
+	public ArrayList<Shot> getShots() {
+		return this.shots;
+	}
+	
+	public void addShot() {
+		int y = this.getY() + 50; 
+		int x = this.getImage(0).getIconWidth() - 40;
+		this.shots.add(new Shot(x,y,35,4,"gfx/shot2.png"));
+	}
+	
+	public void removeShot(Shot shot) {
+		this.shots.remove(shot);
 	}
 }

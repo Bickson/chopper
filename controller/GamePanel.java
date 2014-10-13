@@ -3,6 +3,7 @@ package controller;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -145,7 +146,24 @@ public class GamePanel extends JPanel implements ActionListener{
 		//Obstacle obstacle = this.level1.getObstacles();
 		//g.fillOval(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
 		
+		// Painting Chopper shots logic
+		ArrayList<Shot> shots = chopper.getShots();
+		if(shots.size() != 0) {
+			for(Shot shot: shots) {
+				//g.setColor(Color.red);
+				//g.fillArc(shot.getX(),shot.getY(),shot.getWidth(),shot.getHeight(),90,360);
+				shot.getImage(frameNumber).paintIcon(this,g,shot.getX(),shot.getY());
+				shot.addToX(5);
+				if(shot.getX() > 1024){
+					chopper.removeShot(shot);
+					break;
+				}
+			}
+		}// end of painting shots logic
 		
+		if(this.level1.ObsShotCollition(shots,this.level1.getObstacles())) {;
+			shots.remove(0); //  I just assume that the first 
+		}					//   shot in the list has the biggest x value
 		
 		
 		
@@ -190,6 +208,9 @@ public class GamePanel extends JPanel implements ActionListener{
 			if(ke.getKeyCode() == KeyEvent.VK_LEFT){
 				//Ship.this.x -= 5;
 				//Ship.this.repaint();
+			}
+			if(ke.getKeyCode() == KeyEvent.VK_SPACE) {
+				chopper.addShot();
 			}
 		}
 		

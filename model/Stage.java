@@ -33,5 +33,26 @@ public class Stage {
 	public int getSizeOfObstacles(){
 		return obstacles.size();
 	}
-
+	
+	//Overload
+	public ArrayList<Obstacle> getObstacles() {
+		return this.obstacles;
+	}
+	
+	public boolean ObsShotCollition(ArrayList<Shot> shots, ArrayList<Obstacle> obstacles) {
+		boolean result = false;
+		
+		for(Shot shot: shots) {
+			for(Obstacle obstacle: obstacles) {
+				if(shot.getX() >= obstacle.getX()) {
+					if(shot.getY() > obstacle.getY() && shot.getY() < obstacle.getY() + obstacle.getHeight()) {
+						result = true;
+					}	
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 }
