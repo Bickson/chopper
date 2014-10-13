@@ -59,6 +59,9 @@ public class Background extends Thread {
 		
 		return new ImageIcon(tempImagePath);
 		
+		//TO DO:
+		// BUffer reader
+		
 	}
 	
 	//Loads a few of the images:

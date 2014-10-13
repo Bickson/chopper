@@ -2,6 +2,8 @@ package model;
 
 import javax.swing.ImageIcon;
 
+import controller.GamePanel;
+
 public class Shot extends Obstacle{
 	//private ImageIcon image;
 	//int x,y,width,height;
@@ -17,7 +19,7 @@ public class Shot extends Obstacle{
 	}
 	@Override
 	public int moveX(int index) {
-		return x -= 6;
+		return x -= 6 + GamePanel.getDifficulty();
 	}
 	@Override
 	public ImageIcon getImage(int index){

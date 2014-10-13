@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import controller.GamePanel;
+
 public class EnemyChopper extends Obstacle{
 	private Shot shot;
 	private boolean shotFired = false;
@@ -13,6 +15,7 @@ public class EnemyChopper extends Obstacle{
 	private Chopper chopper;
 	private int targetX, targetY;
 	private int shotTimer; // counts how long ago it fired. So it doenst fire to often when it gets close
+	
 	public EnemyChopper(int x, int y, int width, int height, Chopper chopper_){
 		super(x,y,width,height);
 		preLoader();
@@ -30,7 +33,7 @@ public class EnemyChopper extends Obstacle{
 
 	@Override
 	public int moveX(int index) {
-		return x -= 2;
+		return x -= 2 + GamePanel.getDifficulty();
 	}
 	
 	
@@ -44,7 +47,7 @@ public class EnemyChopper extends Obstacle{
 			y += 1 ;
 		}
 		if (targetY < y){
-			y -= 1 ;
+			y -= 1;
 		}
 		return y;
 	}

@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	private Background background = new Background();
 	private ImageIcon imageBG;
 	private int frameNumber;
-	
+	private static int difficulty = 1;
 	
 	public GamePanel() {
 		this.setBackground(Color.blue);
@@ -64,9 +64,13 @@ public class GamePanel extends JPanel implements ActionListener{
 		
 		JMenu settings = new JMenu("settings");
 		JMenu dif = new JMenu("Difficulty");
-		dif.add(new JMenuItem("Easy"));
-		dif.add(new JMenuItem("Medium"));
-		dif.add(new JMenuItem("Hard"));
+		
+		JMenuItem difEasy= new JMenuItem("Easy");
+		dif.add(difEasy);
+		JMenuItem difMedium = new JMenuItem("Medium");
+		dif.add(difMedium);
+		JMenuItem difHard = new JMenuItem("Hard");
+		dif.add(difHard);
 		settings.add(dif);
 		
 		bar.add(game);
@@ -74,6 +78,12 @@ public class GamePanel extends JPanel implements ActionListener{
 		
 		// add Listeners
 		exit.addActionListener(new exitHandler());
+		difEasy.addActionListener(new difficultyEasyHandler());
+		
+		
+		difMedium.addActionListener(new difficultyMediumHandler());
+		difHard.addActionListener(new difficultyHardHandler());
+		
 		
 		return bar;
 	}
@@ -83,6 +93,22 @@ public class GamePanel extends JPanel implements ActionListener{
 			System.exit(0);
 		}
 		
+	}
+	public class difficultyEasyHandler implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			difficulty = 0;
+		}
+	}
+
+	public class difficultyMediumHandler implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			difficulty = 1;
+		}
+	}
+	public class difficultyHardHandler implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			difficulty = 3;
+		}
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -125,7 +151,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		
 		frameNumber++;
 	}
-	
+	public static int getDifficulty(){
+		return difficulty;
+	}
 	public Stage getStage(){
 		return level1;
 	}
