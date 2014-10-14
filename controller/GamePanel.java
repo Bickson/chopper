@@ -165,6 +165,15 @@ public class GamePanel extends JPanel implements ActionListener{
 			shots.remove(0); //  I just assume that the first 
 		}					//   shot in the list has the biggest x value
 		
+		//check if any enemychoppers life is zero and should die
+		ArrayList<Obstacle> enemychoppers = this.level1.getObstacles();
+		for(Obstacle ec: enemychoppers) {
+			EnemyChopper enemychopper = (EnemyChopper) ec;
+			if(enemychopper.getLife() <= 0) {
+				this.level1.getObstacles().remove(enemychopper);
+				break;
+			}
+		}
 		
 		
 		frameNumber++;

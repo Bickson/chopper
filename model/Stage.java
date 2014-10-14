@@ -49,6 +49,8 @@ public class Stage {
 					if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + obstacle.getHeight())) {
 						System.out.println("Collition!");
 						result = true;
+						EnemyChopper ec = (EnemyChopper) obstacle;
+						ec.life -= 1;
 					}	
 				}
 			}

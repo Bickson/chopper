@@ -16,6 +16,8 @@ public class EnemyChopper extends Obstacle{
 	private int targetX, targetY;
 	private int shotTimer; // counts how long ago it fired. So it doenst fire to often when it gets close
 	private Stage stage;
+	protected int life = 3;
+	
 	public EnemyChopper(int x, int y, int width, int height, Chopper chopper_, Stage stage_){
 		super(x,y,width,height);
 		preLoader();
@@ -29,6 +31,10 @@ public class EnemyChopper extends Obstacle{
 			return shot;
 		}
 		return null;
+	}
+	
+	public int getLife() {
+		return this.life;
 	}
 
 
