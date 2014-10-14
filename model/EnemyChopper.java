@@ -15,12 +15,13 @@ public class EnemyChopper extends Obstacle{
 	private Chopper chopper;
 	private int targetX, targetY;
 	private int shotTimer; // counts how long ago it fired. So it doenst fire to often when it gets close
-	
-	public EnemyChopper(int x, int y, int width, int height, Chopper chopper_){
+	private Stage stage;
+	public EnemyChopper(int x, int y, int width, int height, Chopper chopper_, Stage stage_){
 		super(x,y,width,height);
 		preLoader();
 		chopper = chopper_;
 		//shot = new Shot();
+		stage = stage_;
 	}
 	@Override
 	public Shot getShot(){
@@ -33,6 +34,8 @@ public class EnemyChopper extends Obstacle{
 
 	@Override
 	public int moveX(int index) {
+		//Push back the chopper if its too far back:
+		if(x < -1000)x = 1500;
 		return x -= 2 + GamePanel.getDifficulty();
 	}
 	
@@ -44,10 +47,10 @@ public class EnemyChopper extends Obstacle{
 			whatDoesTheAiDo(index);
 		//}
 		if (targetY > y){
-			y += 1 ;
+			y += 1 + GamePanel.getDifficulty();
 		}
 		if (targetY < y){
-			y -= 1;
+			y -= 1 + GamePanel.getDifficulty() ;
 		}
 		return y;
 	}
@@ -100,6 +103,13 @@ public class EnemyChopper extends Obstacle{
 		//if(1 == index % 5){
 			
 			if (chopper.getY() -20 > y){
+				//Chopper is not horizontally aligned with the player.
+				//Also check that no other enemy choppers are in the way:
+				//for(int i=0; i<stage.getSizeOfObstacles(); i ++){
+				//	if(stage.getObstacles(i).getY(1) +30 > y && stage.getObstacles(i).getY(1) -30 < y){
+				//		
+				//	}
+				//}
 				//System.out.println((int)(Math.random()*10));
 					targetY =  (chopper.getY() + (int)(Math.random()*10));
 				}
