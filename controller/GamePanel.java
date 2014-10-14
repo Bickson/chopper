@@ -190,13 +190,13 @@ public class GamePanel extends JPanel implements ActionListener{
 			Chopper chopper = GamePanel.this.level1.getChopper();
 			
 			if(ke.getKeyCode() == KeyEvent.VK_DOWN){
-				chopper.addToY(5);
+				chopper.addToY(8);
 				//GamePanel.this.repaint();
 				//Ship.this.y += 5;
 				//Ship.this.repaint();
 			}
 			if(ke.getKeyCode() == KeyEvent.VK_UP){
-				chopper.addToY(-5);
+				chopper.addToY(-8);
 				//GamePanel.this.repaint();
 				//Ship.this.y -= 5;
 				//Ship.this.repaint();

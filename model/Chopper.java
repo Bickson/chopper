@@ -66,10 +66,11 @@ public class Chopper {
 	public void addShot() {
 		int y = this.getY() + 50; 
 		int x = this.getImage(0).getIconWidth() - 40;
-		this.shots.add(new Shot(x,y,35,4,"gfx/shot2.png"));
+		this.shots.add(new Shot(x,y,20,20,"gfx/shot2.png"));
 	}
 	
 	public void removeShot(Shot shot) {
 		this.shots.remove(shot);
 	}
+	
 }

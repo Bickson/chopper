@@ -44,8 +44,10 @@ public class Stage {
 		
 		for(Shot shot: shots) {
 			for(Obstacle obstacle: obstacles) {
-				if(shot.getX() >= obstacle.getX()) {
-					if(shot.getY() > obstacle.getY() && shot.getY() < obstacle.getY() + obstacle.getHeight()) {
+				if(shot.getX() >= obstacle.getX() && shot.getX() < (obstacle.getX() + obstacle.getWidth())) {
+					System.out.println("Entering X");
+					if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + obstacle.getHeight())) {
+						System.out.println("Collition!");
 						result = true;
 					}	
 				}
