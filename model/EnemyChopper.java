@@ -8,6 +8,7 @@ import controller.GamePanel;
 
 public class EnemyChopper extends Obstacle{
 	private Shot shot;
+	//private ArrayList<Shot> shots;
 	private boolean shotFired = false;
 	private ArrayList<ImageIcon> images = new ArrayList<ImageIcon>();
 	private int howManyImagesToLoad = 2;
@@ -33,6 +34,10 @@ public class EnemyChopper extends Obstacle{
 		return null;
 	}
 	
+	public void setShotfire(boolean value) {
+		this.shotFired = value;
+	}
+	
 	public int getLife() {
 		return this.life;
 	}
@@ -42,7 +47,7 @@ public class EnemyChopper extends Obstacle{
 	public int moveX(int index) {
 		//Push back the chopper if its too far back:
 		if(x < -1000)x = 1500;
-		return x -= 2 + GamePanel.getDifficulty();
+		return x -= 1 + GamePanel.getDifficulty();
 	}
 	
 	

@@ -1,6 +1,7 @@
 package controller;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	private Background background = new Background();
 	private ImageIcon imageBG;
 	private int frameNumber;
-	private static int difficulty = 1;
+	private static int difficulty = 0;
 	
 	public GamePanel() {
 		this.setBackground(Color.blue);
@@ -27,31 +28,17 @@ public class GamePanel extends JPanel implements ActionListener{
 		frameNumber = 1;
 	}
 	
+	public Stage getStage() {
+		return this.level1;
+	}
+	
 	public void startAnimation() {
 		timer = new Timer(20, this);
 		timer.start();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		//Obstacle obstacle = this.level1.getObstacles();
-		//obstacle.addToX(-1);
 		repaint();
-		
-		/*for(Obsticle obs: obsticles) {
-			obs.move();
-			if(obs.getX() <= 0){
-				this.addAndRemoveObs(obs);
-				break;
-			}
-			
-			if(checkCollition(obs)) {
-				System.out.println("COLLITION!");
-				System.exit(0);
-				//Toolkit.getDefaultToolkit().beep();
-				//JOptionPane.showMessageDialog(this, "U suck");
-			}
-			repaint();
-		}*/
 	}
 	
 	public JMenuBar createMenu() {
@@ -108,7 +95,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 	public class difficultyHardHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			difficulty = 3;
+			difficulty = 2;
 		}
 	}
 	
@@ -121,33 +108,42 @@ public class GamePanel extends JPanel implements ActionListener{
 		imageBG.paintIcon(this, g, 0, 0);
 		
 		
-		//Paint Chopper
+		//=======Paint Chopper========//
 		Chopper chopper = this.level1.getChopper();
 		chopper.getImage(frameNumber).paintIcon(this,g,chopper.getX(),chopper.getY());
+		this.paintChopperShots(g);
+		//============================//
 		
 		
-		//Paint all obstacles
-		for(int i=0; i<level1.getSizeOfObstacles(); i++){
-			Obstacle obstacle = level1.getObstacles(i);
-			obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.moveX(frameNumber),obstacle.moveY(frameNumber));
-		}
-		
-		//Paint any shots fired
-		for(int i=0; i<level1.getSizeOfObstacles(); i++){
-			Shot shot = level1.getObstacles(i).getShot();
-			//Shot shot = obstacle.getShot();
-			if(shot != null ){
-				//System.out.println("DEBUG: drawing shot!!");
-				shot.getImage(frameNumber).paintIcon(this,g,shot.moveX(frameNumber),shot.moveY(frameNumber));
+		//=======Boss Logic========//
+		if(this.level1.getObstacles().size() == 0) { // No EnemyChoppers left Time for boss
+			if(this.level1.getBoss() == null) {
+				this.level1.createBoss();
 			}
-			//obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.getX(),obstacle.getY(frameNumber));
+			if(this.level1.getBoss().getLife() > 0) {
+				this.paintBoss(g);
+				this.paintBossShots(g, chopper);
+				this.checkBossCollition();
+			}	
 		}
+		//============================//
 		
-		//Obstacle obstacle = this.level1.getObstacles();
-		//g.fillOval(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
 		
-		// Painting Chopper shots logic
-		ArrayList<Shot> shots = chopper.getShots();
+		//=======Obstacle Logic========//
+		this.paintObstacles(g);
+		this.paintObstacleShots(g);
+		this.checkObstacleHit();
+		this.checkHitByObstacle();
+		//============================//
+
+		
+		this.paintPlayerStats(g);
+	
+		frameNumber++;
+	}
+	
+	public void paintChopperShots(Graphics g) {
+		ArrayList<Shot> shots = this.level1.getChopper().getShots();
 		if(shots.size() != 0) {
 			for(Shot shot: shots) {
 				//g.setColor(Color.red);
@@ -155,15 +151,57 @@ public class GamePanel extends JPanel implements ActionListener{
 				shot.getImage(frameNumber).paintIcon(this,g,shot.getX(),shot.getY());
 				shot.addToX(5);
 				if(shot.getX() > 1024){
-					chopper.removeShot(shot);
+					this.level1.getChopper().removeShot(shot);
 					break;
 				}
 			}
 		}// end of painting shots logic
-		
-		if(this.level1.ObsShotCollition(shots,this.level1.getObstacles())) {;
-			shots.remove(0); //  I just assume that the first 
-		}					//   shot in the list has the biggest x value
+	}
+	
+	public void checkBossCollition() {
+		ArrayList<Obstacle> bosses = new ArrayList<Obstacle>();
+		ArrayList<Shot> shots = this.level1.getChopper().getShots();
+		bosses.add(this.level1.getBoss());
+		if(this.level1.bossShotCollition(shots,bosses)) {;
+			shots.remove(0);
+		}
+	}
+	
+	public void paintBoss(Graphics g) {
+		Boss boss = this.level1.getBoss();
+		boss.getImage(frameNumber).paintIcon(this,g, boss.getX(), boss.moveY(frameNumber));
+		Font font = new Font("Helvetica", Font.BOLD, 20);
+		//g.setFont(font);
+		//g.drawString("" + boss.getLife(), boss.getX() + 110, boss.getY() + 45);
+		g.setColor(Color.red);
+		g.fillRect(boss.getX() + 30, boss.getY(), 9*boss.getLife(), 5);
+		g.setColor(Color.black);
+		g.drawRect(boss.getX() + 30, boss.getY(), 180, 5);
+	}
+	
+	public void paintBossShots(Graphics g, Chopper chopper) {
+		ArrayList<Shot> bossShots = this.level1.getBoss().getShots();
+		for(Shot shot: bossShots) {
+			shot.getImage(frameNumber).paintIcon(this,g,shot.getX(),shot.getY());
+			shot.addToX(-7);
+			if(this.level1.ChopperShotCollition(shot,chopper)) {
+				bossShots.remove(0);
+				this.level1.getPlayer().loseLife();
+				break;
+			}
+		}
+	}
+	
+	public void paintObstacles(Graphics g) {
+		ArrayList<Obstacle> obstacles = this.level1.getObstacles();
+		for(Obstacle obstacle: obstacles) {
+			obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.moveX(frameNumber),obstacle.moveY(frameNumber));
+			g.setColor(Color.red);
+			g.fillRect(obstacle.getX() + 40, obstacle.getY() + 20, 50*obstacle.getLife(), 5);
+			g.setColor(Color.black);
+			g.drawRect(obstacle.getX() + 40, obstacle.getY() + 20, 150, 5);
+			
+		}
 		
 		//check if any enemychoppers life is zero and should die
 		ArrayList<Obstacle> enemychoppers = this.level1.getObstacles();
@@ -174,15 +212,70 @@ public class GamePanel extends JPanel implements ActionListener{
 				break;
 			}
 		}
-		
-		
-		frameNumber++;
 	}
+	
+	public void paintObstacleShots(Graphics g) {
+		for(int i=0; i<level1.getSizeOfObstacles(); i++){
+			Shot shot = level1.getObstacles(i).getShot();
+			//Shot shot = obstacle.getShot();
+			if(shot != null ){
+				//System.out.println("DEBUG: drawing shot!!");
+				shot.getImage(frameNumber).paintIcon(this,g,shot.moveX(frameNumber),shot.moveY(frameNumber));
+			}
+			//obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.getX(),obstacle.getY(frameNumber));
+		}
+	}
+	
+	public void checkObstacleHit() {
+		ArrayList<Shot> shots = this.level1.getChopper().getShots();
+		if(this.level1.ObsShotCollition(shots,this.level1.getObstacles())) {;
+			shots.remove(0); //  I just assume that the first 
+		}					//   shot in the list has the biggest x value
+	}
+	
+	public void checkHitByObstacle() {
+		ArrayList<Obstacle> obstacles = this.level1.getObstacles();
+		EnemyChopper ECshotToRemove = null;
+		for(Obstacle obstacle:obstacles) {
+			if(obstacle.getShot() != null) {
+				if( this.level1.ChopperShotCollition(obstacle.getShot(), this.level1.getChopper()) ) {
+					this.level1.getPlayer().loseLife();
+					ECshotToRemove = (EnemyChopper) obstacle;
+					break;
+				}
+			}
+		}
+		
+		if(ECshotToRemove != null) {
+			ECshotToRemove.setShotfire(false);
+		}
+	}
+	
+	public void paintPlayerStats(Graphics g) {
+		//Player stats
+		Font font1 = new Font("Helvetica", Font.PLAIN, 20);
+		Font font2 = new Font("Helvetica", Font.BOLD, 30);
+		String playername = this.level1.getPlayer().getName();
+		String playerlife = "" + this.level1.getPlayer().getLifes();
+		g.setFont(font1);
+		g.drawString("Player: ", 25, 580);
+		g.drawString("Lifes: ", 25, 610);
+		g.setFont(font2);
+		g.drawString(playername, 100, 580);
+		g.setFont(font2);
+		g.drawString(playerlife, 100, 610);
+		
+		Chopper chopper = this.level1.getChopper();
+		if(this.level1.getPlayer().getLifes() > 0) {
+			g.setColor(Color.red);
+			g.fillRect(chopper.getX() + 40, chopper.getY() + 20, 5*this.level1.getPlayer().getLifes(), 5);
+			g.setColor(Color.black);
+			g.drawRect(chopper.getX() + 40, chopper.getY() + 20, 150, 5);
+		}
+	}
+	
 	public static int getDifficulty(){
 		return difficulty;
-	}
-	public Stage getStage(){
-		return level1;
 	}
 	
 	

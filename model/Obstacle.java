@@ -21,6 +21,10 @@ public class Obstacle {
 		return image;
 	}*/
 	
+	public int getLife() {
+		return 0;
+	}
+	
 	public ImageIcon getImage(int index){
 		return image;
 	}
