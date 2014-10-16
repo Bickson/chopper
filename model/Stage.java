@@ -20,14 +20,14 @@ public class Stage {
 		//enemyChopper1
 		obstacles.add(new EnemyChopper(1100,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(1100,600,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(2100,300,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(2100,600,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(1900,300,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(1900,600,50,50, chopper, this));
 		
 		
 	}
 	
 	public void createBoss() {
-		this.boss = new Boss(770,100,50,50,this.chopper);
+		this.boss = new Boss(1100,100,50,50,this.chopper);
 	}
 	
 	public Boss getBoss() {
@@ -104,8 +104,8 @@ public class Stage {
 					if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + 100)) {
 						//System.out.println("Collition!");
 						result = true;
-						Boss ec = (Boss) obstacle;
-						ec.life -= 1;
+						Boss boss = (Boss) obstacle;
+						boss.addToLife(-1);
 					}	
 				}
 			}

@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		this.setBackground(Color.blue);
 		this.addKeyListener(new keyHandler());
 		this.setFocusable(true);
-		frameNumber = 1;
+		frameNumber = 2;
 	}
 	
 	public Stage getStage() {
@@ -39,6 +39,13 @@ public class GamePanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		repaint();
+		
+		if(this.level1.getBoss() != null) {
+			if(this.level1.getBoss().getY() > 680) {
+				this.stopAnimation();
+			}
+		}
+		
 	}
 	
 	public JMenuBar createMenu() {
@@ -107,6 +114,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		imageBG = background.getBG(frameNumber);
 		imageBG.paintIcon(this, g, 0, 0);
 		
+		if(frameNumber%25 == 0){
+			this.level1.getPlayer().addToScore(1);
+		}
 		
 		//=======Paint Chopper========//
 		Chopper chopper = this.level1.getChopper();
@@ -116,7 +126,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		
 		
 		//=======Boss Logic========//
-		if(this.level1.getObstacles().size() == 0) { // No EnemyChoppers left Time for boss
+		if(this.level1.getObstacles().size() == 0) {// No EnemyChoppers left Time for boss
 			if(this.level1.getBoss() == null) {
 				this.level1.createBoss();
 			}
@@ -124,7 +134,24 @@ public class GamePanel extends JPanel implements ActionListener{
 				this.paintBoss(g);
 				this.paintBossShots(g, chopper);
 				this.checkBossCollition();
-			}	
+			}
+			if(this.level1.getBoss().getLife() <= 0){
+				this.level1.getBoss().LoaderDead();
+				this.level1.getBoss().addToY(2);
+				this.level1.getBoss().getImage(frameNumber).paintIcon(this,g, this.level1.getBoss().getX(), this.level1.getBoss().getY());
+			}
+			if(this.level1.getBoss().getLife() == 0) {
+				this.level1.getPlayer().addToScore(1000);
+				this.level1.getBoss().addToLife(-1);
+			}
+			// intro logic
+			if(this.level1.getBoss().getX() >= 700){
+				this.level1.getBoss().addToX(-2);
+				if(this.level1.getBoss().getX() == 700) {
+					this.level1.getBoss().setIntroduced(true);
+				}
+			}
+			
 		}
 		//============================//
 		
@@ -136,9 +163,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		this.checkHitByObstacle();
 		//============================//
 
-		
 		this.paintPlayerStats(g);
-	
+		
+		
 		frameNumber++;
 	}
 	
@@ -162,7 +189,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		ArrayList<Obstacle> bosses = new ArrayList<Obstacle>();
 		ArrayList<Shot> shots = this.level1.getChopper().getShots();
 		bosses.add(this.level1.getBoss());
-		if(this.level1.bossShotCollition(shots,bosses)) {;
+		if(this.level1.bossShotCollition(shots,bosses)) {
 			shots.remove(0);
 		}
 	}
@@ -209,6 +236,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			EnemyChopper enemychopper = (EnemyChopper) ec;
 			if(enemychopper.getLife() <= 0) {
 				this.level1.getObstacles().remove(enemychopper);
+				this.level1.getPlayer().addToScore(100);
 				break;
 			}
 		}
@@ -240,6 +268,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			if(obstacle.getShot() != null) {
 				if( this.level1.ChopperShotCollition(obstacle.getShot(), this.level1.getChopper()) ) {
 					this.level1.getPlayer().loseLife();
+					this.level1.getPlayer().addToScore(-10);
 					ECshotToRemove = (EnemyChopper) obstacle;
 					break;
 				}
@@ -256,10 +285,10 @@ public class GamePanel extends JPanel implements ActionListener{
 		Font font1 = new Font("Helvetica", Font.PLAIN, 20);
 		Font font2 = new Font("Helvetica", Font.BOLD, 30);
 		String playername = this.level1.getPlayer().getName();
-		String playerlife = "" + this.level1.getPlayer().getLifes();
+		String playerlife = "" + this.level1.getPlayer().getScore();
 		g.setFont(font1);
 		g.drawString("Player: ", 25, 580);
-		g.drawString("Lifes: ", 25, 610);
+		g.drawString("Score: ", 25, 610);
 		g.setFont(font2);
 		g.drawString(playername, 100, 580);
 		g.setFont(font2);
@@ -292,13 +321,13 @@ public class GamePanel extends JPanel implements ActionListener{
 			Chopper chopper = GamePanel.this.level1.getChopper();
 			
 			if(ke.getKeyCode() == KeyEvent.VK_DOWN){
-				chopper.addToY(8);
+				chopper.addToY(10);
 				//GamePanel.this.repaint();
 				//Ship.this.y += 5;
 				//Ship.this.repaint();
 			}
 			if(ke.getKeyCode() == KeyEvent.VK_UP){
-				chopper.addToY(-8);
+				chopper.addToY(-10);
 				//GamePanel.this.repaint();
 				//Ship.this.y -= 5;
 				//Ship.this.repaint();
@@ -321,5 +350,16 @@ public class GamePanel extends JPanel implements ActionListener{
 			//	ke.getKeyChar() + ", " + ke.getKeyCode());
 		}
 	}
+	
+	public void stopAnimation() {
+		timer.stop();
+		String playername = this.level1.getPlayer().getName();
+		int playerscore = this.level1.getPlayer().getScore();
+		int playerlifelost = this.level1.getPlayer().getLifes() -30;
+		int totalscore = playerscore + (playerlifelost*10);
+		JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " + playerlifelost + " (*10)" + "\nTotal score: " + totalscore);
+		System.exit(0);
+	}
+	
 	
 }

@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 public class Background extends Thread {
 	private ArrayList<ImageIcon> bgImage = new ArrayList<ImageIcon>();
-	private int howManyImagesToLoad = 300;
+	private int howManyImagesToLoad = 900;
 	private String tempImagePath;
 	
 	public Background(){
@@ -53,7 +53,8 @@ public class Background extends Thread {
 		if(index >= howManyImagesToLoad){
 			index = (index % howManyImagesToLoad) +1 ;
 		}
-		tempImagePath = "gfx/bgLevel1/level1Render";
+		
+		tempImagePath = "gfx/bgLevel1Alt/backGroundRenderv03.";
 		tempImagePath += index + ".jpg";
 		//index = index % howManyImagesToLoad +1;
 		
@@ -69,7 +70,7 @@ public class Background extends Thread {
 		
 		for(int n=1; n<=howManyImagesToLoad;n++){
 			//First create the string
-			tempImagePath = "gfx/bgLevel1/level1Render";
+			tempImagePath = "gfx/bgLevel1Alt/backGroundRenderv03.";
 			tempImagePath += n + ".jpg";
 			//then load the images into array
 			bgImage.add(new ImageIcon(tempImagePath));

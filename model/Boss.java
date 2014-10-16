@@ -10,11 +10,13 @@ public class Boss extends Obstacle {
 	
 	Chopper targetchopper;
 	ArrayList<ImageIcon> images = new ArrayList<ImageIcon>();
-	private int howManyImagesToLoad = 2;
+	private int howManyImagesToLoad = 1;
 	private String tempImagePath;
 	private int shotTimer;
 	ArrayList<Shot> shots = new ArrayList<Shot>();
 	protected int life = 20;
+	private boolean introduced;
+	private boolean dead;
 
 	public Boss(int x, int y, int width, int height, Chopper chopper) {
 		super(x, y, width, height);
@@ -28,6 +30,10 @@ public class Boss extends Obstacle {
 		this.targetchopper = chopper;
 	}
 	
+	public void setIntroduced(boolean introduced) {
+		this.introduced = introduced;
+	}
+	
 	public int getX() {
 		return this.x;
 	}
@@ -36,8 +42,16 @@ public class Boss extends Obstacle {
 		return this.y;
 	}
 	
+	public void addToY(int value) {
+		this.y += value;
+	}
+	
 	public int getLife() {
 		return this.life;
+	}
+	
+	public void addToLife(int value) {
+		this.life += value;
 	}
 	
 	@Override
@@ -61,7 +75,7 @@ public class Boss extends Obstacle {
 	public void whatDoesTheAiDo(int index) {
 		this.shotTimer++;
 		
-		if(shotTimer > 50) {
+		if(shotTimer > 50 && introduced == true) {
 			Shot shot = new Shot(x,y + (height/2) ,20,20, "gfx/bossShot.png");
 			this.shots.add(shot);
 			this.shotTimer = 0;
@@ -84,7 +98,19 @@ public class Boss extends Obstacle {
 	public void preLoader(){
 		for(int n=1; n<=howManyImagesToLoad;n++){
 			//First create the string
-			tempImagePath = "gfx/Boss";
+			tempImagePath = "gfx/zeppelin";
+			tempImagePath += n + ".png";
+			//then load the images into array
+			images.add(new ImageIcon(tempImagePath));
+		}
+		
+	}
+	
+	public void LoaderDead(){
+		this.howManyImagesToLoad = 23;
+		for(int n=1; n<=howManyImagesToLoad;n++){
+			//First create the string
+			tempImagePath = "gfx/deadboss/zeppelindead";
 			tempImagePath += n + ".png";
 			//then load the images into array
 			images.add(new ImageIcon(tempImagePath));
