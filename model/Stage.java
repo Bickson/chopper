@@ -101,7 +101,7 @@ public class Stage {
 			for(Obstacle obstacle: obstacles) {
 				if(shot.getX() >= obstacle.getX() && shot.getX() < (obstacle.getX() + obstacle.getImage(0).getIconWidth())) {
 					//System.out.println("Entering X");
-					if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + 100)) {
+					if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + 130)) {
 						//System.out.println("Collition!");
 						result = true;
 						Boss boss = (Boss) obstacle;

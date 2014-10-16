@@ -40,6 +40,9 @@ public class GamePanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		repaint();
 		
+		if(this.level1.getPlayer().getLifes() <= 0){
+			this.stopAnimation();
+		}
 		if(this.level1.getBoss() != null) {
 			if(this.level1.getBoss().getY() > 680) {
 				this.stopAnimation();
