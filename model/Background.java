@@ -6,14 +6,50 @@ import javax.swing.ImageIcon;
 
 public class Background extends Thread {
 	private ArrayList<ImageIcon> bgImage = new ArrayList<ImageIcon>();
-	private int howManyImagesToLoad = 300;
+	private int howManyImagesToLoad = 900;
 	private String tempImagePath;
+	private ImageIcon tempImage;
+	private DynamicLoader dynamicLoaderThread;
+	
 	
 	public Background(){
 		//preLoader();
+		//Create thread.
+		dynamicLoaderThread = new DynamicLoader();
+		//StartThread:
+		dynamicLoaderThread.start();
 	}
 	
 	public ImageIcon getBG(int index){
+		//only update every two frames:
+		index = index / 2;
+		
+		//
+		//on the fly loading
+		if(index >= howManyImagesToLoad){
+			index = (index % howManyImagesToLoad) +1 ;
+		}
+		//System.out.println("Index: " + index);
+		//tempImage = dynamicLoaderThread.bgImage[index];
+		//System.out.println("ImageRecieved: " + index);
+		//dynamicLoaderThread.index = index;
+		
+		//return tempImage;
+		return dynamicLoaderThread.getImage(index);
+		
+		/*
+		//tempImagePath = "gfx/bgLevel1/level1Render";
+		//This is for the long image sequence
+		tempImagePath = "gfx/bgLevel1Alt/backGroundRenderv03.";
+		if(index<100){
+			if(index<10)tempImagePath += "00";
+			else tempImagePath += "0";
+		}
+		
+		tempImagePath += index + ".jpg";
+		//index = index % howManyImagesToLoad +1;
+		
+		return new ImageIcon(tempImagePath);
 		
 		
 		//if index is too big
@@ -47,13 +83,22 @@ public class Background extends Thread {
 		
 		// END TEST
 		
+		
+		/*
 		//only update every two frames:
 		index = index / 2;
 		//on the fly loading
 		if(index >= howManyImagesToLoad){
 			index = (index % howManyImagesToLoad) +1 ;
 		}
-		tempImagePath = "gfx/bgLevel1/level1Render";
+		//tempImagePath = "gfx/bgLevel1/level1Render";
+		//This is for the long image sequence
+		tempImagePath = "gfx/bgLevel1Alt/backGroundRenderv03.";
+		if(index<100){
+			if(index<10)tempImagePath += "00";
+			else tempImagePath += "0";
+		}
+		
 		tempImagePath += index + ".jpg";
 		//index = index % howManyImagesToLoad +1;
 		
@@ -61,6 +106,8 @@ public class Background extends Thread {
 		
 		//TO DO:
 		// BUffer reader
+		 * 
+		 */
 		
 	}
 	

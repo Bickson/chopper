@@ -17,11 +17,11 @@ public class Stage {
 		
 		//enemyChopper1
 		obstacles.add(new EnemyChopper(1100,100,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(900,600,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(1900,400,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(5000,600,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(2000,400,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(3500,800,50,50, chopper, this));
 	}
-	
+
 	public Chopper getChopper() {
 		return chopper;
 	}

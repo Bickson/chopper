@@ -41,7 +41,7 @@ public class EnemyChopper extends Obstacle{
 	@Override
 	public int moveX(int index) {
 		//Push back the chopper if its too far back:
-		if(x < -1000)x = 1500;
+		if(x < -260)x = 2000;
 		return x -= 2 + GamePanel.getDifficulty();
 	}
 	
@@ -50,7 +50,7 @@ public class EnemyChopper extends Obstacle{
 	public int moveY(int index) {
 		//update AI every 5 frames
 		//if(1 == index % 5){
-			whatDoesTheAiDo(index);
+			if(x> 30 && x<1050)whatDoesTheAiDo(index);
 		//}
 		if (targetY > y){
 			y += 1 + GamePanel.getDifficulty();
@@ -83,18 +83,15 @@ public class EnemyChopper extends Obstacle{
 	
 	private void whatDoesTheAiDo(int index){
 		//update AI every * frames
+		
+		//This Checks if the chopper is in within fire range
 		if(chopper.getY() +50 > y && chopper.getY() -50 < y && x < 800){
-			
-		//if(chopper.getY() )
 		//Fire shot!!!
 			if(shotFired == false){
 			//if(shot == null){
 			shot = new Shot(x,y + (height/2) ,20,20);
 				shotFired = true;
-				//System.out.println("DEBUG: Fire!!");
-				//System.out.println("DEBUG: Fire!!");
 			}
-			//System.out.println("DEBUG: chopperY: " + chopper.getY() + " enemyChopper Y: " + y );
 		}
 		shotTimer++;
 		//check if shot is out.
@@ -105,17 +102,20 @@ public class EnemyChopper extends Obstacle{
 			}
 		}
 
-		if(1 == index % 5 + (int)(Math.random()*4)){
-		//if(1 == index % 5){
+		//This updates where the chopper is headed
+		if(1 == index % 5 + (int)(Math.random()*4)){ // Dont update every frame
 			
 			if (chopper.getY() -20 > y){
 				//Chopper is not horizontally aligned with the player.
+				
 				//Also check that no other enemy choppers are in the way:
-				//for(int i=0; i<stage.getSizeOfObstacles(); i ++){
-				//	if(stage.getObstacles(i).getY(1) +30 > y && stage.getObstacles(i).getY(1) -30 < y){
-				//		
-				//	}
-				//}
+				//Check above
+				for(int i=0; i<stage.getSizeOfObstacles(); i ++){
+					if(stage.getObstacles(i).getY(1) + stage.getObstacles(i).getHeight() + 10> y 
+							&& stage.getObstacles(i).getY(1) -  stage.getObstacles(i).getHeight() - 10 < y){
+						targetY = y -10;
+					}
+				}
 				//System.out.println((int)(Math.random()*10));
 					targetY =  (chopper.getY() + (int)(Math.random()*10));
 				}

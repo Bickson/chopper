@@ -132,7 +132,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.moveX(frameNumber),obstacle.moveY(frameNumber));
 		}
 		
-		//Paint any shots fired
+		//Paint any shots fired by enemyChoppers
 		for(int i=0; i<level1.getSizeOfObstacles(); i++){
 			Shot shot = level1.getObstacles(i).getShot();
 			//Shot shot = obstacle.getShot();
@@ -192,7 +192,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			System.out.println("Key typed   : " + 
 				ke.getKeyChar() + ", " + ke.getKeyCode());
 		}
-		
+		//test
 		public void keyPressed(KeyEvent ke) {
 			//System.out.println("Key pressed : " + 
 			//	ke.getKeyChar() + ", " + ke.getKeyCode());
