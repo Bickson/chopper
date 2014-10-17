@@ -9,6 +9,7 @@ import controller.GamePanel;
 public class EnemyChopper extends Obstacle{
 	private Shot shot;
 	//private ArrayList<Shot> shots;
+	//To do: Change shot to arrayList
 	private boolean shotFired = false;
 	private ArrayList<ImageIcon> images = new ArrayList<ImageIcon>();
 	private int howManyImagesToLoad = 2;

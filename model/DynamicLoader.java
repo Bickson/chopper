@@ -87,7 +87,7 @@ public class DynamicLoader extends Thread{
 				} // End if frames needs to be loaded:
 				else {
 					try{
-						//System.out.println("DEBUG: Thread Sleeping");
+						System.out.println("DEBUG: Thread Sleeping");
 						Thread.sleep(1000);
 						//System.out.println("DEBUG: Thread Done Sleeping");
 					}
