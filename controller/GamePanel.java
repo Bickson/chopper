@@ -13,33 +13,33 @@ import model.*;
 
 
 public class GamePanel extends JPanel implements ActionListener{
-	
+
 	private Stage level1 = new Stage();
 	private Timer timer;
 	private Background background = new Background();
 	private ImageIcon imageBG;
 	private int frameNumber;
 	private static int difficulty = 0;
-	
+
 	public GamePanel() {
 		this.setBackground(Color.blue);
 		this.addKeyListener(new keyHandler());
 		this.setFocusable(true);
 		frameNumber = 2;
 	}
-	
+
 	public Stage getStage() {
 		return this.level1;
 	}
-	
+
 	public void startAnimation() {
 		timer = new Timer(20, this);
 		timer.start();
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		repaint();
-		
+
 		if(this.level1.getPlayer().getLifes() <= 0){
 			this.stopAnimation();
 		}
@@ -48,21 +48,21 @@ public class GamePanel extends JPanel implements ActionListener{
 				this.stopAnimation();
 			}
 		}
-		
+
 	}
-	
+
 	public JMenuBar createMenu() {
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
 		game.add(new JMenuItem("New Game"));
 		game.add(new JMenuItem("Load Game"));
-		
+
 		JMenuItem exit = new JMenuItem("Exit Game");
 		game.add(exit);
-		
+
 		JMenu settings = new JMenu("settings");
 		JMenu dif = new JMenu("Difficulty");
-		
+
 		JMenuItem difEasy= new JMenuItem("Easy");
 		dif.add(difEasy);
 		JMenuItem difMedium = new JMenuItem("Medium");
@@ -70,27 +70,27 @@ public class GamePanel extends JPanel implements ActionListener{
 		JMenuItem difHard = new JMenuItem("Hard");
 		dif.add(difHard);
 		settings.add(dif);
-		
+
 		bar.add(game);
 		bar.add(settings);
-		
+
 		// add Listeners
 		exit.addActionListener(new exitHandler());
 		difEasy.addActionListener(new difficultyEasyHandler());
-		
-		
+
+
 		difMedium.addActionListener(new difficultyMediumHandler());
 		difHard.addActionListener(new difficultyHardHandler());
-		
-		
+
+
 		return bar;
 	}
-	
+
 	public class exitHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
 		}
-		
+
 	}
 	public class difficultyEasyHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -108,26 +108,26 @@ public class GamePanel extends JPanel implements ActionListener{
 			difficulty = 2;
 		}
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		//Paint Background
 		//Background
-		
+
 		imageBG = background.getBG(frameNumber);
 		imageBG.paintIcon(this, g, 0, 0);
-		
+
 		if(frameNumber%25 == 0){
 			this.level1.getPlayer().addToScore(1);
 		}
-		
+
 		//=======Paint Chopper========//
 		Chopper chopper = this.level1.getChopper();
 		chopper.getImage(frameNumber).paintIcon(this,g,chopper.getX(),chopper.getY());
 		this.paintChopperShots(g);
 		//============================//
-		
-		
+
+
 		//=======Boss Logic========//
 		if(this.level1.getObstacles().size() == 0) {// No EnemyChoppers left Time for boss
 			if(this.level1.getBoss() == null) {
@@ -154,11 +154,11 @@ public class GamePanel extends JPanel implements ActionListener{
 					this.level1.getBoss().setIntroduced(true);
 				}
 			}
-			
+
 		}
 		//============================//
-		
-		
+
+
 		//=======Obstacle Logic========//
 		this.paintObstacles(g);
 		this.paintObstacleShots(g);
@@ -167,11 +167,11 @@ public class GamePanel extends JPanel implements ActionListener{
 		//============================//
 
 		this.paintPlayerStats(g);
-		
-		
+
+
 		frameNumber++;
 	}
-	
+
 	public void paintChopperShots(Graphics g) {
 		ArrayList<Shot> shots = this.level1.getChopper().getShots();
 		if(shots.size() != 0) {
@@ -187,7 +187,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			}
 		}// end of painting shots logic
 	}
-	
+
 	public void checkBossCollition() {
 		ArrayList<Obstacle> bosses = new ArrayList<Obstacle>();
 		ArrayList<Shot> shots = this.level1.getChopper().getShots();
@@ -196,7 +196,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			shots.remove(0);
 		}
 	}
-	
+
 	public void paintBoss(Graphics g) {
 		Boss boss = this.level1.getBoss();
 		boss.getImage(frameNumber).paintIcon(this,g, boss.getX(), boss.moveY(frameNumber));
@@ -208,7 +208,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		g.setColor(Color.black);
 		g.drawRect(boss.getX() + 30, boss.getY(), 180, 5);
 	}
-	
+
 	public void paintBossShots(Graphics g, Chopper chopper) {
 		ArrayList<Shot> bossShots = this.level1.getBoss().getShots();
 		for(Shot shot: bossShots) {
@@ -221,7 +221,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			}
 		}
 	}
-	
+
 	public void paintObstacles(Graphics g) {
 		ArrayList<Obstacle> obstacles = this.level1.getObstacles();
 		for(Obstacle obstacle: obstacles) {
@@ -230,9 +230,9 @@ public class GamePanel extends JPanel implements ActionListener{
 			g.fillRect(obstacle.getX() + 40, obstacle.getY() + 20, 50*obstacle.getLife(), 5);
 			g.setColor(Color.black);
 			g.drawRect(obstacle.getX() + 40, obstacle.getY() + 20, 150, 5);
-			
+
 		}
-		
+
 		//check if any enemychoppers life is zero and should die
 		ArrayList<Obstacle> enemychoppers = this.level1.getObstacles();
 		for(Obstacle ec: enemychoppers) {
@@ -244,7 +244,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			}
 		}
 	}
-	
+
 	public void paintObstacleShots(Graphics g) {
 		for(int i=0; i<level1.getSizeOfObstacles(); i++){
 			Shot shot = level1.getObstacles(i).getShot();
@@ -256,14 +256,14 @@ public class GamePanel extends JPanel implements ActionListener{
 			//obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.getX(),obstacle.getY(frameNumber));
 		}
 	}
-	
+
 	public void checkObstacleHit() {
 		ArrayList<Shot> shots = this.level1.getChopper().getShots();
 		if(this.level1.ObsShotCollition(shots,this.level1.getObstacles())) {;
-			shots.remove(0); //  I just assume that the first 
+			shots.remove(0); //  I just assume that the first
 		}					//   shot in the list has the biggest x value
 	}
-	
+
 	public void checkHitByObstacle() {
 		ArrayList<Obstacle> obstacles = this.level1.getObstacles();
 		EnemyChopper ECshotToRemove = null;
@@ -277,12 +277,12 @@ public class GamePanel extends JPanel implements ActionListener{
 				}
 			}
 		}
-		
+
 		if(ECshotToRemove != null) {
 			ECshotToRemove.setShotfire(false);
 		}
 	}
-	
+
 	public void paintPlayerStats(Graphics g) {
 		//Player stats
 		Font font1 = new Font("Helvetica", Font.PLAIN, 20);
@@ -296,7 +296,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		g.drawString(playername, 100, 580);
 		g.setFont(font2);
 		g.drawString(playerlife, 100, 610);
-		
+
 		Chopper chopper = this.level1.getChopper();
 		if(this.level1.getPlayer().getLifes() > 0) {
 			g.setColor(Color.red);
@@ -305,24 +305,24 @@ public class GamePanel extends JPanel implements ActionListener{
 			g.drawRect(chopper.getX() + 40, chopper.getY() + 20, 150, 5);
 		}
 	}
-	
+
 	public static int getDifficulty(){
 		return difficulty;
 	}
-	
-	
+
+
 	private class keyHandler implements KeyListener {
-		
+
 		public void keyTyped(KeyEvent ke) {
-			System.out.println("Key typed   : " + 
+			System.out.println("Key typed   : " +
 				ke.getKeyChar() + ", " + ke.getKeyCode());
 		}
-		
+		//test
 		public void keyPressed(KeyEvent ke) {
-			//System.out.println("Key pressed : " + 
+			//System.out.println("Key pressed : " +
 			//	ke.getKeyChar() + ", " + ke.getKeyCode());
 			Chopper chopper = GamePanel.this.level1.getChopper();
-			
+
 			if(ke.getKeyCode() == KeyEvent.VK_DOWN){
 				chopper.addToY(10);
 				//GamePanel.this.repaint();
@@ -347,13 +347,13 @@ public class GamePanel extends JPanel implements ActionListener{
 				chopper.addShot();
 			}
 		}
-		
+
 		public void keyReleased(KeyEvent ke) {
-			//System.out.println("Key released: " + 
+			//System.out.println("Key released: " +
 			//	ke.getKeyChar() + ", " + ke.getKeyCode());
 		}
 	}
-	
+
 	public void stopAnimation() {
 		timer.stop();
 		String playername = this.level1.getPlayer().getName();
@@ -363,6 +363,6 @@ public class GamePanel extends JPanel implements ActionListener{
 		JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " + playerlifelost + " (*10)" + "\nTotal score: " + totalscore);
 		System.exit(0);
 	}
-	
-	
+
+
 }
