@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		timer.start();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
 
@@ -87,28 +88,33 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 
 	public class exitHandler implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
 		}
 
 	}
 	public class difficultyEasyHandler implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			difficulty = 0;
 		}
 	}
 
 	public class difficultyMediumHandler implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			difficulty = 1;
 		}
 	}
 	public class difficultyHardHandler implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			difficulty = 2;
 		}
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		//Paint Background
@@ -128,6 +134,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		//============================//
 
 
+		/*
 		//=======Boss Logic========//
 		if(this.level1.getObstacles().size() == 0) {// No EnemyChoppers left Time for boss
 			if(this.level1.getBoss() == null) {
@@ -157,7 +164,7 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		}
 		//============================//
-
+*/
 
 		//=======Obstacle Logic========//
 		this.paintObstacles(g);
@@ -313,11 +320,13 @@ public class GamePanel extends JPanel implements ActionListener{
 
 	private class keyHandler implements KeyListener {
 
+		@Override
 		public void keyTyped(KeyEvent ke) {
 			System.out.println("Key typed   : " +
 				ke.getKeyChar() + ", " + ke.getKeyCode());
 		}
 		//test
+		@Override
 		public void keyPressed(KeyEvent ke) {
 			//System.out.println("Key pressed : " +
 			//	ke.getKeyChar() + ", " + ke.getKeyCode());
@@ -348,6 +357,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			}
 		}
 
+		@Override
 		public void keyReleased(KeyEvent ke) {
 			//System.out.println("Key released: " +
 			//	ke.getKeyChar() + ", " + ke.getKeyCode());

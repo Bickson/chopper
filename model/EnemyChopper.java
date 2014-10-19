@@ -75,6 +75,9 @@ public class EnemyChopper extends Obstacle{
 		return images.get(index);
 	}
 
+
+
+	
 	public void preLoader(){
 
 		for(int n=1; n<=howManyImagesToLoad;n++){
@@ -86,30 +89,21 @@ public class EnemyChopper extends Obstacle{
 		}
 
 	}
-
+	
+	/*
+	 * Decides what the AI does
+	 */
 	private void whatDoesTheAiDo(int index){
-		//update AI every * frames
+		checkIfFiring(index);
+		updateCurrentHeading(index);
 
-		//This Checks if the chopper is in within fire range
-		if(chopper.getY() +50 > y && chopper.getY() -50 < y && x < 800){
-		//Fire shot!!!
-			if(shotFired == false){
-			//if(shot == null){
-			shot = new Shot(x,y + (height/2) ,20,20);
-				shotFired = true;
-			}
-		}
-		shotTimer++;
-		//check if shot is out.
-		if(shotFired == true && shotTimer > 70){
-			if(shot.getX(index) <= 0){
-				shotFired = false;
-				shotTimer = 0;
-			}
-		}
-
-		//This updates where the chopper is headed
-		if(1 == index % 5 + (int)(Math.random()*4)){ // Dont update every frame
+	}
+	
+	/*
+	 * This updates where the chopper is headed
+	 */
+	private void updateCurrentHeading(int index){
+		if(1 == index % 5 + (int)(Math.random()*4)){ // Don't update every frame
 
 			if (chopper.getY() -20 > y){
 				//Chopper is not horizontally aligned with the player.
@@ -129,7 +123,32 @@ public class EnemyChopper extends Obstacle{
 					targetY = chopper.getY() - (int)(Math.random()*10);
 				}
 		}
-
-
 	}
+	
+/*
+ * Checks if the chopper is in within fire range. 
+ * Also resets shotFired so it can fire again
+ */
+	private void checkIfFiring(int index){
+		//This Checks if the chopper is in within fire range
+		if(chopper.getY() +50 > y && chopper.getY() -50 < y && x < 800){
+		//Fire shot!!!
+			if(shotFired == false){
+			//if(shot == null){
+			shot = new Shot(x,y + (height/2) ,20,20);
+				shotFired = true;
+			}
+		}
+		shotTimer++;
+		//check if shot is out of the screen . And reset if it is
+		if(shotFired == true && shotTimer > 70){
+			if(shot.getX(index) <= 0){
+				shotFired = false;
+				shotTimer = 0;
+			}
+		}
+	}
+	
+	
+
 }
