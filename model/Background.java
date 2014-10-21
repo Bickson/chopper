@@ -24,19 +24,6 @@ public class Background extends Thread {
 		return dynamicLoaderThread.getImage(index);
 	}
 
-	//Loads a few of the images:
-	public void preLoader(){
-
-		for(int n=1; n<=howManyImagesToLoad;n++){
-			//First create the string
-			tempImagePath = "gfx/bgLevel1/level1Backgorundv9.";
-			tempImagePath += n + ".jpg";
-			//then load the images into array
-			bgImage.add(new ImageIcon(tempImagePath));
-		}
-
-	}
-
 	public String toString(){
 		String info = new String();
 		info += howManyImagesToLoad;

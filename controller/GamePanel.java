@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	private ImageIcon imageBG;
 	private int frameNumber;
 	private static int difficulty = 0;
+	private boolean paused;
 
 	public GamePanel() {
 		this.setBackground(Color.blue);
@@ -56,8 +57,11 @@ public class GamePanel extends JPanel implements ActionListener{
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
 		game.add(new JMenuItem("New Game"));
-		game.add(new JMenuItem("Load Game"));
-
+		
+		JMenuItem pauseResume = new JMenuItem("Pause/Resume");
+		game.add(pauseResume);
+		
+		
 		JMenuItem exit = new JMenuItem("Exit Game");
 		game.add(exit);
 
@@ -78,6 +82,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		// add Listeners
 		exit.addActionListener(new exitHandler());
 		difEasy.addActionListener(new difficultyEasyHandler());
+		
+		pauseResume.addActionListener(new pauseResume());
+		
 
 
 		difMedium.addActionListener(new difficultyMediumHandler());
@@ -86,6 +93,20 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		return bar;
 	}
+	
+
+	public class pauseResume implements ActionListener {
+		// TODO Auto-generated method stub
+		public void actionPerformed(ActionEvent e) {
+			if(paused) {
+				GamePanel.this.resumeGame();
+			}
+			else {
+				GamePanel.this.pauseGame();
+			}
+		}
+	}
+
 
 	public class exitHandler implements ActionListener {
 		@Override
@@ -362,6 +383,15 @@ public class GamePanel extends JPanel implements ActionListener{
 			//System.out.println("Key released: " +
 			//	ke.getKeyChar() + ", " + ke.getKeyCode());
 		}
+	}
+	
+	public void pauseGame() {
+		timer.stop();
+		this.paused = true;
+	}
+	public void resumeGame(){
+		timer.start();
+		this.paused = false;
 	}
 
 	public void stopAnimation() {
