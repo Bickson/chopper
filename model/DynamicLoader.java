@@ -27,33 +27,34 @@ public class DynamicLoader extends Thread{
 	public void run(){
 		
 			//Load First Buffer
-			//System.out.println("DEBUG: Thread Started");
+			System.out.println("DEBUG: Thread Started");
 			for(int i=0; i<buffer; i++){
 				//This is for the long image sequence
-				tempImagePath = "gfx/bgLevel1Alt/backGroundRenderv03.";
-				if(i<100){
+				tempImagePath = "gfx/bgLevel1/level1Backgorundv9.";
+				/*if(i<100){
 					if(i<10)tempImagePath += "00";
 					else tempImagePath += "0";
-				}
+				}*/
 				
 				tempImagePath += i + ".jpg";
 				bgImage[i] =  new ImageIcon(tempImagePath);
+				//System.out.println(tempImagePath);
 				
 			}
 			
 			framesLoaded = buffer;
-			//System.out.println("DEBUG: Thread first 50 frames loaded");
+			System.out.println("DEBUG: Thread first 50 frames loaded");
 			//Start Endless loop:
 			while(true){
 				//If frames needs to be loaded
 				if(framesLoaded < (currentFrame + buffer)){
-					//System.out.println("DEBUG: framesLoaded: " + framesLoaded
-					//		+ " CurrentFrame: " + currentFrame);
-			
+					System.out.println("DEBUG: framesLoaded: " + framesLoaded
+							+ " CurrentFrame: " + currentFrame);
+					
 					//Clear out used frames
 					//leave the first frames in there for when it loops
 					for(int i=buffer; i<(currentFrame);i++){
-						//System.out.println("DEBUG: clearingFrames: " + i);
+						System.out.println("DEBUG: clearingFrames: " + i);
 						bgImage[i]=null;
 					}
 					
@@ -62,7 +63,7 @@ public class DynamicLoader extends Thread{
 						
 						for(int i=howManyImagesToLoad;i>(howManyImagesToLoad+1-buffer);i--){
 							bgImage[i]=null;
-							System.out.println("DEBUG: clearingFrames: " + i);	
+							//System.out.println("DEBUG: clearingFrames: " + i);	
 						}
 
 						clearLastFrames = false;
@@ -72,11 +73,11 @@ public class DynamicLoader extends Thread{
 					for(; framesLoaded<(currentFrame + buffer); framesLoaded++){
 						
 						//This is for the long image sequence
-						tempImagePath = "gfx/bgLevel1Alt/backGroundRenderv03.";
-						if(framesLoaded<100){
+						tempImagePath = "gfx/bgLevel1/level1Backgorundv9.";
+						/*if(framesLoaded<100){
 							if(framesLoaded<10)tempImagePath += "00";
 							else tempImagePath += "0";
-						}
+						}*/
 						
 						tempImagePath += framesLoaded + ".jpg";
 						//Load image
@@ -88,7 +89,7 @@ public class DynamicLoader extends Thread{
 				else {
 					try{
 						//System.out.println("DEBUG: Thread Sleeping");
-						Thread.sleep(1000);
+						Thread.sleep(500);
 						//System.out.println("DEBUG: Thread Done Sleeping");
 					}
 					catch (InterruptedException ie){

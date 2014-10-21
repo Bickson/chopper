@@ -83,9 +83,9 @@ public class Stage {
 		boolean result = false;
 
 		if( shot.getX() <= (chopper.getX() + chopper.getImage(0).getIconWidth()) && shot.getX() > chopper.getX() ) {
-			System.out.println("Entering X");
+			//System.out.println("Entering X");
 			if(shot.getY() < ( chopper.getY() + 70) && shot.getY() > chopper.getY() ) {
-				System.out.println("Collition!");
+				//System.out.println("Collition!");
 				result = true;
 			}
 		}
@@ -118,7 +118,7 @@ public class Stage {
 		boolean result = false;
 		if(shot.getX() >= obstacle.getX() && shot.getX() < (obstacle.getX() + obstacle.getImage(0).getIconWidth())) {
 			if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + obstacle.getImage(0).getIconWidth())) {
-				System.out.println("Collition!");
+				//System.out.println("Collition!");
 				result = true;
 			}
 		}
