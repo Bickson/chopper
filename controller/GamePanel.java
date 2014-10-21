@@ -187,7 +187,8 @@ public class GamePanel extends JPanel implements ActionListener{
 			if(this.level1.getBoss().getLife() > 0) {
 				this.paintBoss(g);
 				this.paintBossShots(g, chopper);
-				this.checkBossCollition();
+				this.checkBossHit();
+				this.checkHitByBoss();
 			}
 			if(this.level1.getBoss().getLife() <= 0){
 				this.level1.getBoss().LoaderDead();
@@ -239,12 +240,18 @@ public class GamePanel extends JPanel implements ActionListener{
 		}// end of painting shots logic
 	}
 
-	public void checkBossCollition() {
+	public void checkBossHit() {
 		ArrayList<Obstacle> bosses = new ArrayList<Obstacle>();
 		ArrayList<Shot> shots = this.level1.getChopper().getShots();
 		bosses.add(this.level1.getBoss());
-		if(this.level1.bossShotCollition(shots,bosses)) {
-			shots.remove(0);
+		for(Obstacle obs: bosses) {
+			for(Shot shot: shots) {
+				if(this.level1.Collition(shot,obs)) {
+					this.level1.getBoss().addToLife(-1);
+					shots.remove(0);
+					break;
+				}
+			}
 		}
 	}
 
@@ -265,8 +272,18 @@ public class GamePanel extends JPanel implements ActionListener{
 		for(Shot shot: bossShots) {
 			shot.getImage(frameNumber).paintIcon(this,g,shot.getX(),shot.getY());
 			shot.addToX(-7);
-			if(this.level1.ChopperShotCollition(shot,chopper)) {
+			/*if(this.level1.ChopperShotCollition(shot,chopper)) {
 				bossShots.remove(0);
+				this.level1.getPlayer().loseLife();
+				break;
+			}*/
+		}
+	}
+	public void checkHitByBoss() {
+		ArrayList<Shot> bossShots = this.level1.getBoss().getShots();
+		for(Shot shot: bossShots) {
+			if(this.level1.ChopperShotCollition(shot,this.level1.getChopper())) {
+				bossShots.remove(shot);
 				this.level1.getPlayer().loseLife();
 				break;
 			}
@@ -297,40 +314,44 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 
 	public void paintObstacleShots(Graphics g) {
-		for(int i=0; i<level1.getSizeOfObstacles(); i++){
-			Shot shot = level1.getObstacles(i).getShot();
-			//Shot shot = obstacle.getShot();
-			if(shot != null ){
-				//System.out.println("DEBUG: drawing shot!!");
+		ArrayList<Obstacle> obstacles = this.level1.getObstacles();
+		for(Obstacle obs: obstacles) {
+			obs.getShots();
+			for(Shot shot: obs.getShots()) {
 				shot.getImage(frameNumber).paintIcon(this,g,shot.moveX(frameNumber),shot.moveY(frameNumber));
 			}
-			//obstacle.getImage(frameNumber).paintIcon(this,g,obstacle.getX(),obstacle.getY(frameNumber));
 		}
 	}
 
 	public void checkObstacleHit() {
-		ArrayList<Shot> shots = this.level1.getChopper().getShots();
-		if(this.level1.ObsShotCollition(shots,this.level1.getObstacles())) {;
-			shots.remove(0); //  I just assume that the first
-		}					//   shot in the list has the biggest x value
-	}
-
-	public void checkHitByObstacle() {
 		ArrayList<Obstacle> obstacles = this.level1.getObstacles();
-		EnemyChopper ECshotToRemove = null;
-		for(Obstacle obstacle:obstacles) {
-			if(obstacle.getShot() != null) {
-				if( this.level1.ChopperShotCollition(obstacle.getShot(), this.level1.getChopper()) ) {
-					this.level1.getPlayer().loseLife();
-					this.level1.getPlayer().addToScore(-10);
-					ECshotToRemove = (EnemyChopper) obstacle;
+		ArrayList<Shot> shots = this.level1.getChopper().getShots();
+		for(Obstacle obs: obstacles) {
+			for(Shot shot: shots) {
+				if(this.level1.Collition(shot,obs)) {
+					//this.level1.getBoss().addToLife(-1);
+					EnemyChopper ec = (EnemyChopper) obs;
+					ec.addToLife(-1);
+					shots.remove(0);
 					break;
 				}
 			}
 		}
+	}
 
-		if(ECshotToRemove != null) {
-			ECshotToRemove.setShotfire(false);
+	public void checkHitByObstacle() {
+		ArrayList<Obstacle> obstacles = this.level1.getObstacles();
+		for(Obstacle obstacle:obstacles) {
+			if(obstacle.getShots().size() != 0 ) {
+				for(Shot shot:obstacle.getShots()){
+					if( this.level1.ChopperShotCollition(shot, this.level1.getChopper()) ) {
+						this.level1.getPlayer().loseLife();
+						this.level1.getPlayer().addToScore(-10);
+						obstacle.getShots().remove(shot);
+						break;
+					}
+				}
+			}
 		}
 	}
 

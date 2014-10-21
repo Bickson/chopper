@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Stage {
 
 	private Chopper chopper;
@@ -20,14 +22,14 @@ public class Stage {
 		//enemyChopper1
 		obstacles.add(new EnemyChopper(1100,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(1100,600,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(1150,100,50,50, chopper, this));
+		/*obstacles.add(new EnemyChopper(1150,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(1200,500,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(1500,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(1700,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(2100,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(3100,600,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(3500,300,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(3500,600,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(3500,600,50,50, chopper, this));*/
 
 	}
 
@@ -64,25 +66,6 @@ public class Stage {
 		return this.obstacles;
 	}
 
-	public boolean ObsShotCollition(ArrayList<Shot> shots, ArrayList<Obstacle> obstacles) {
-		boolean result = false;
-
-		for(Shot shot: shots) {
-			for(Obstacle obstacle: obstacles) {
-				if(shot.getX() >= obstacle.getX() && shot.getX() < (obstacle.getX() + obstacle.getWidth())) {
-					//System.out.println("Entering X");
-					if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + obstacle.getHeight())) {
-						//System.out.println("Collition!");
-						result = true;
-						EnemyChopper ec = (EnemyChopper) obstacle;
-						ec.life -= 1;
-					}
-				}
-			}
-		}
-
-		return result;
-	}
 
 	public boolean ChopperShotCollition(Shot shot, Chopper chopper) {
 		boolean result = false;
@@ -92,27 +75,6 @@ public class Stage {
 			if(shot.getY() < ( chopper.getY() + 70) && shot.getY() > chopper.getY() ) {
 				//System.out.println("Collition!");
 				result = true;
-			}
-		}
-
-		return result;
-	}
-
-
-	public boolean bossShotCollition(ArrayList<Shot> shots, ArrayList<Obstacle> obstacles) {
-		boolean result = false;
-
-		for(Shot shot: shots) {
-			for(Obstacle obstacle: obstacles) {
-				if(shot.getX() >= obstacle.getX() && shot.getX() < (obstacle.getX() + obstacle.getImage(0).getIconWidth())) {
-					//System.out.println("Entering X");
-					if(shot.getY() > obstacle.getY() && shot.getY() < (obstacle.getY() + 130)) {
-						//System.out.println("Collition!");
-						result = true;
-						Boss boss = (Boss) obstacle;
-						boss.addToLife(-1);
-					}
-				}
 			}
 		}
 

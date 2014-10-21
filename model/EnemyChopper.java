@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import controller.GamePanel;
 
 public class EnemyChopper extends Obstacle{
-	private Shot shot;
+	//private Shot shot;
 	//private ArrayList<Shot> shots;
 	//To do: Change shot to arrayList
 	private boolean shotFired = false;
@@ -18,7 +18,7 @@ public class EnemyChopper extends Obstacle{
 	private int targetX, targetY;
 	private int shotTimer; // counts how long ago it fired. So it doenst fire to often when it gets close
 	private Stage stage;
-	protected int life = 3;
+	private int life = 3;
 	private static int numOfChoppers = 0; // Not needed, will check if same object
 	private int chopperID = 0;// Not needed, will check if same object
 	private boolean closeToAlly = false;
@@ -33,11 +33,8 @@ public class EnemyChopper extends Obstacle{
 		numOfChoppers++;// Not needed, will check if same object
 	}
 	@Override
-	public Shot getShot(){
-		if(shotFired == true){
-			return shot;
-		}
-		return null;
+	public ArrayList<Shot> getShots() {
+		return this.shots;
 	}
 
 	public void setShotfire(boolean value) {
@@ -46,6 +43,10 @@ public class EnemyChopper extends Obstacle{
 
 	public int getLife() {
 		return this.life;
+	}
+	
+	public void addToLife(int value) {
+		this.life += value;
 	}
 
 
@@ -174,14 +175,14 @@ public class EnemyChopper extends Obstacle{
 		//Fire shot!!!
 			if(shotFired == false){
 			//if(shot == null){
-			shot = new Shot(x,y + (height/2) ,20,20);
+			this.shots.add(new Shot(x,y + (height/2) ,20,20));
 				shotFired = true;
 			}
 		}
 		shotTimer++;
 		//check if shot is out of the screen . And reset if it is
 		if(shotFired == true && shotTimer > 70){
-			if(shot.getX(index) <= 0){
+			if(shots.size() <= 0){
 				shotFired = false;
 				shotTimer = 0;
 			}

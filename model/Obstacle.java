@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -8,12 +9,14 @@ public class Obstacle {
 	
 	protected ImageIcon image;
 	protected int x,y,width,height;
-	protected Shot shot;
+	//protected Shot shot;
+	protected ArrayList<Shot> shots;
 	public Obstacle (int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.shots = new ArrayList<Shot>();
 	}
 	
 	/* public void setImage();
@@ -69,10 +72,7 @@ public class Obstacle {
 		this.y += i;
 	}
 	
-	public Shot getShot(){
-		if(shot != null){
-			return shot;
-		}
-		return null;
+	public ArrayList<Shot> getShots(){
+		return this.shots;
 	}
 }
