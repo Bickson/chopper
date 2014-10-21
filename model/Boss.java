@@ -76,7 +76,7 @@ public class Boss extends Obstacle {
 		this.shotTimer++;
 		
 		if(shotTimer > 50 && introduced == true) {
-			Shot shot = new Shot(x,y + (height/2) ,20,20, "gfx/bossShot.png");
+			Shot shot = new Shot(x,y + (height/2) ,20,20, "gfx/bossBlimp/bossShot.png");
 			this.shots.add(shot);
 			this.shotTimer = 0;
 		}
@@ -98,7 +98,7 @@ public class Boss extends Obstacle {
 	public void preLoader(){
 		for(int n=1; n<=howManyImagesToLoad;n++){
 			//First create the string
-			tempImagePath = "gfx/zeppelin";
+			tempImagePath = "gfx/bossBlimp/bossBlimp.";
 			tempImagePath += n + ".png";
 			//then load the images into array
 			images.add(new ImageIcon(tempImagePath));

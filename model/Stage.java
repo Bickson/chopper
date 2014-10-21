@@ -20,9 +20,12 @@ public class Stage {
 		//enemyChopper1
 		obstacles.add(new EnemyChopper(1100,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(1100,600,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(1500,300,50,50, chopper, this));
-		obstacles.add(new EnemyChopper(1500,600,50,50, chopper, this));
-
+		obstacles.add(new EnemyChopper(1150,100,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(1200,500,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(2100,100,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(3100,600,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(4500,300,50,50, chopper, this));
+		obstacles.add(new EnemyChopper(4500,600,50,50, chopper, this));
 
 	}
 

@@ -9,6 +9,7 @@ import controller.GamePanel;
 public class EnemyChopper extends Obstacle{
 	private Shot shot;
 	//private ArrayList<Shot> shots;
+	//To do: Change shot to arrayList
 	private boolean shotFired = false;
 	private ArrayList<ImageIcon> images = new ArrayList<ImageIcon>();
 	private int howManyImagesToLoad = 2;
@@ -18,13 +19,18 @@ public class EnemyChopper extends Obstacle{
 	private int shotTimer; // counts how long ago it fired. So it doenst fire to often when it gets close
 	private Stage stage;
 	protected int life = 3;
-
+	private static int numOfChoppers = 0; // Not needed, will check if same object
+	private int chopperID = 0;// Not needed, will check if same object
+	private boolean closeToAlly = false;
+	
 	public EnemyChopper(int x, int y, int width, int height, Chopper chopper_, Stage stage_){
 		super(x,y,width,height);
 		preLoader();
 		chopper = chopper_;
 		//shot = new Shot();
 		stage = stage_;
+		chopperID=numOfChoppers;// Not needed, will check if same object
+		numOfChoppers++;// Not needed, will check if same object
 	}
 	@Override
 	public Shot getShot(){
@@ -74,6 +80,9 @@ public class EnemyChopper extends Obstacle{
 		return images.get(index);
 	}
 
+
+
+	
 	public void preLoader(){
 
 		for(int n=1; n<=howManyImagesToLoad;n++){
@@ -85,10 +94,81 @@ public class EnemyChopper extends Obstacle{
 		}
 
 	}
-
+	
+	/*
+	 * Decides what the AI does
+	 */
 	private void whatDoesTheAiDo(int index){
-		//update AI every * frames
+		if(x<1400)checkIfFiring(index);
+		if(x<1400)checkIfCloseToAlly(index);
+		if(x<1400 && closeToAlly==false)updateCurrentHeading(index);
+		
 
+	}
+	
+	/*
+	 * This updates where the chopper is headed
+	 */
+	private void updateCurrentHeading(int index){
+		if(1 == index % 10 + (int)(Math.random()*4)){ // Don't update every frame
+
+			if (chopper.getY() -20 > y){
+				//Chopper is not horizontally aligned with the player.
+
+
+				//System.out.println((int)(Math.random()*10));
+					targetY =  (chopper.getY() + (int)(Math.random()*10));
+				}
+				if (chopper.getY() + 20 < y){
+					targetY = chopper.getY() - (int)(Math.random()*10);
+				}
+		}
+	}
+	
+	/*
+	 * Checks if close to an ally and correct course so they stay parallelso there's no overlap and greater fire range
+	 */
+	private void checkIfCloseToAlly(int index){
+		//Check if above:
+		//Also check that no other enemy choppers are in the way:
+		if(1 == index % 10){
+			for(int i=0; i<stage.getSizeOfObstacles(); i ++){
+				//Check below
+				//&& i != chopperID
+				if((stage.getObstacles(i).getY() + 200 < y + 120 ) && i != chopperID && (stage.getObstacles(i).getX()-160 <= x ) && (stage.getObstacles(i).getX()+160 >= x)){
+				// this != stage.getObstacles(i)
+				//if (stage.getObstacles(i).getY()  + 20 < y +20 && i != chopperID){
+				
+					closeToAlly = true;
+					//System.out.println(i + "DEBUG:  Chopper above! Chopper Id: " + chopperID + "closeToAlly: " + closeToAlly);
+					targetY = y  - 250; // go up!
+					//break;
+				}
+				//Check up
+				else if((stage.getObstacles(i).getY() -200  > y- 120 ) && i != chopperID && (stage.getObstacles(i).getX()-160 <= x ) && (stage.getObstacles(i).getX()+160 >= x)){
+				//if(stage.getObstacles(i).getY()  - 20 > y - 20 && i != chopperID){
+					
+					closeToAlly = true;
+					//System.out.println(i + "DEBUG:  Chopper below! Chopper Id: " + chopperID 
+					//		+ "closeToAlly: " + closeToAlly);
+					targetY = y + 250;// go down!
+					
+					//break;
+				}
+				else {
+					closeToAlly = false;
+					//System.out.println("DEBUG: Not close Chopper Id: " + chopperID + " closeToAlly: " + closeToAlly);
+					
+				}
+			}
+		}
+
+	}
+/*
+ * Checks if the chopper is in within fire range. 
+ * Also resets shotFired so it can fire again
+ */
+	private void checkIfFiring(int index){
 		//This Checks if the chopper is in within fire range
 		if(chopper.getY() +50 > y && chopper.getY() -50 < y && x < 800){
 		//Fire shot!!!
@@ -99,36 +179,15 @@ public class EnemyChopper extends Obstacle{
 			}
 		}
 		shotTimer++;
-		//check if shot is out.
+		//check if shot is out of the screen . And reset if it is
 		if(shotFired == true && shotTimer > 70){
 			if(shot.getX(index) <= 0){
 				shotFired = false;
 				shotTimer = 0;
 			}
 		}
-
-		//This updates where the chopper is headed
-		if(1 == index % 5 + (int)(Math.random()*4)){ // Dont update every frame
-
-			if (chopper.getY() -20 > y){
-				//Chopper is not horizontally aligned with the player.
-
-				//Also check that no other enemy choppers are in the way:
-				//Check above
-				for(int i=0; i<stage.getSizeOfObstacles(); i ++){
-					if(stage.getObstacles(i).getY(1) + stage.getObstacles(i).getHeight() + 10> y
-							&& stage.getObstacles(i).getY(1) -  stage.getObstacles(i).getHeight() - 10 < y){
-						targetY = y -10;
-					}
-				}
-				//System.out.println((int)(Math.random()*10));
-					targetY =  (chopper.getY() + (int)(Math.random()*10));
-				}
-				if (chopper.getY() + 20 < y){
-					targetY = chopper.getY() - (int)(Math.random()*10);
-				}
-		}
-
-
 	}
+	
+	
+
 }
