@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
+import view.GFXInterface;
+import main.GameMain;
 import model.*;
 //import model.Chopper;
 
@@ -20,7 +23,9 @@ public class GamePanel extends JPanel implements ActionListener{
 	private ImageIcon imageBG;
 	private int frameNumber;
 	private static int difficulty = 0;
-
+	private boolean paused=false;
+	
+	
 	public GamePanel() {
 		this.setBackground(Color.blue);
 		this.addKeyListener(new keyHandler());
@@ -55,9 +60,15 @@ public class GamePanel extends JPanel implements ActionListener{
 	public JMenuBar createMenu() {
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
-		game.add(new JMenuItem("New Game"));
-		game.add(new JMenuItem("Load Game"));
+		JMenuItem newGame = new JMenuItem("New Game");
+		game.add(newGame);
+		//game.add(new JMenuItem("New Game"));
+		JMenuItem pauseResume = new JMenuItem("Pause/Resume");
+		game.add(pauseResume);
 
+		
+		
+		
 		JMenuItem exit = new JMenuItem("Exit Game");
 		game.add(exit);
 
@@ -77,8 +88,11 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		// add Listeners
 		exit.addActionListener(new exitHandler());
+		newGame.addActionListener(new newGameHandler());
+		
 		difEasy.addActionListener(new difficultyEasyHandler());
 
+		
 
 		difMedium.addActionListener(new difficultyMediumHandler());
 		difHard.addActionListener(new difficultyHardHandler());
@@ -86,7 +100,30 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		return bar;
 	}
+	public class pauseResumeHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(paused){
+				//this.stopAnimation()
+			}
+			
+		}
 
+	}
+	
+	public class newGameHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				Runtime.getRuntime().exec("java -jar chopper.jar");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.exit(0);
+		}
+
+	}
 	public class exitHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
