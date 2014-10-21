@@ -100,7 +100,6 @@ public class EnemyChopper extends Obstacle{
 	 */
 	private void whatDoesTheAiDo(int index){
 		if(x<1400)checkIfFiring(index);
-		//if(x<1400 && chopperID==0)checkIfCloseToAlly(index);
 		if(x<1400)checkIfCloseToAlly(index);
 		if(x<1400 && closeToAlly==false)updateCurrentHeading(index);
 		
