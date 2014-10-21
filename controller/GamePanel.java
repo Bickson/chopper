@@ -134,7 +134,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		//============================//
 
 
-		/*
+		
 		//=======Boss Logic========//
 		if(this.level1.getObstacles().size() == 0) {// No EnemyChoppers left Time for boss
 			if(this.level1.getBoss() == null) {
@@ -164,7 +164,7 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		}
 		//============================//
-*/
+
 
 		//=======Obstacle Logic========//
 		this.paintObstacles(g);

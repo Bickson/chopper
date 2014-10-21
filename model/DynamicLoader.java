@@ -14,7 +14,7 @@ public class DynamicLoader extends Thread{
 	private int framesLoaded;
 	private final int buffer = 50;
 	private ImageIcon[] bgImage = new ImageIcon[howManyImagesToLoad+1]; 
-	
+	private int lastFrameCleared = buffer;
 	private boolean clearLastFrames = false;
 	
 	
@@ -36,7 +36,6 @@ public class DynamicLoader extends Thread{
 				if(framesLoaded < (currentFrame + buffer)){
 					clearUsedFrames();
 					loadBufferFrames();
-					
 				}
 				//If no frames needs to be load sleep.
 				else {
@@ -74,16 +73,18 @@ public class DynamicLoader extends Thread{
 	private void clearUsedFrames(){
 		
 		//leave the first frames in there for when it loops
-		for(int i=buffer; i<(currentFrame);i++){
+		for(int i=lastFrameCleared; i < (currentFrame -1) ; i++){
+			
 			//System.out.println("DEBUG: clearingFrames: " + i);
 			bgImage[i]=null;
+			lastFrameCleared = currentFrame -1;
 		}
 		
 		
 		//If image sequence loops clear last frames:
 		if(clearLastFrames==true){
 			
-			for(int i=howManyImagesToLoad;i>(howManyImagesToLoad+1-buffer);i--){
+			for(int i=howManyImagesToLoad; i >(howManyImagesToLoad -1 -buffer);i--){
 				bgImage[i]=null;
 				//System.out.println("DEBUG: clearingFrames: " + i);	
 			}
@@ -148,7 +149,7 @@ public class DynamicLoader extends Thread{
 		//Loops the image sequence if it goes over
 		if(index_ >= howManyImagesToLoad){
 			index_ = (index_ % howManyImagesToLoad) +1;
-			System.out.println("DEBUG: Image to load: " + index_);
+			//System.out.println("DEBUG: Image to load: " + index_);
 		}
 		
 		//If so it clears the last images in the Image array
@@ -158,7 +159,7 @@ public class DynamicLoader extends Thread{
 			clearLastFrames = true;
 		}
 		currentFrame = index_;
-		System.out.println("DEBUG: getImage: currentFrame: " + currentFrame + " index: " + index_);
+		//System.out.println("DEBUG: getImage: currentFrame: " + currentFrame + " index: " + index_);
 		return bgImage[index_];
 	}
 	

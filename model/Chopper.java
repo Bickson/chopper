@@ -8,7 +8,7 @@ public class Chopper {
 	
 	//private ImageIcon image = new ImageIcon("gfx/Image001.png");
 	private ArrayList<ImageIcon> images = new ArrayList<ImageIcon>();
-	private int howManyImagesToLoad = 2;
+	private int howManyImagesToLoad = 11;
 	private String tempImagePath;
 	//= new ImageIcon("gfx/heliAlpha1.png");
 	private int height,width,x,y;
@@ -51,7 +51,7 @@ public class Chopper {
 		
 		for(int n=1; n<=howManyImagesToLoad;n++){
 			//First create the string
-			tempImagePath = "gfx/heliAlpha";
+			tempImagePath = "gfx/chopperFrames/helli.";
 			tempImagePath += n + ".png";
 			//then load the images into array
 			images.add(new ImageIcon(tempImagePath));
@@ -64,10 +64,10 @@ public class Chopper {
 	}
 	
 	public void addShot() {
-		int y = this.getY() + 50; 
+		int y = this.getY() + 60; 
 		int x = this.getImage(0).getIconWidth() - 40;
 //<<<<<<< HEAD
-		this.shots.add(new Shot(x,y,20,20,"gfx/shot2.png"));
+		this.shots.add(new Shot(x,y,20,20,"gfx/heliShot.png"));
 //=======
 		//this.shots.add(new Shot(x,y,35,4,"gfx/shot.png"));
 //>>>>>>> Added a dynamic background image loader.
