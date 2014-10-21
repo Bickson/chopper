@@ -60,18 +60,16 @@ public class GamePanel extends JPanel implements ActionListener{
 	public JMenuBar createMenu() {
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
-		game.add(new JMenuItem("New Game"));
 
 		JMenuItem pauseResume = new JMenuItem("Pause/Resume");
 		game.add(pauseResume);
-		JMenuItem newGame = new JMenuItem("New Game");
-		game.add(newGame);
-		//game.add(new JMenuItem("New Game"));
-
-
 
 		JMenuItem exit = new JMenuItem("Exit Game");
 		game.add(exit);
+		
+		JMenuItem newgame = new JMenuItem("New Game");
+		game.add(newgame);
+		
 
 		JMenu settings = new JMenu("settings");
 		JMenu dif = new JMenu("Difficulty");
@@ -89,7 +87,8 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		// add Listeners
 		exit.addActionListener(new exitHandler());
-		newGame.addActionListener(new newGameHandler());
+		
+		newgame.addActionListener(new newGameHandler());
 
 		difEasy.addActionListener(new difficultyEasyHandler());
 
@@ -109,7 +108,10 @@ public class GamePanel extends JPanel implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(paused){
-				//this.stopAnimation()
+				GamePanel.this.resumeGame();
+			}
+			else {
+				GamePanel.this.pauseGame();
 			}
 
 		}
