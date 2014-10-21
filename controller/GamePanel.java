@@ -60,7 +60,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	public JMenuBar createMenu() {
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
-		game.add(new JMenuItem("New Game"));
+		//game.add(new JMenuItem("New Game"));
 
 		JMenuItem pauseResume = new JMenuItem("Pause/Resume");
 		game.add(pauseResume);
