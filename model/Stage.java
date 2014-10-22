@@ -10,8 +10,6 @@ import javax.swing.ImageIcon;
 public class Stage {
 
 	private Chopper chopper;
-	private Background background;
-	private int width;
 	private ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 	private Player player;
 	private Boss boss;
@@ -68,8 +66,13 @@ public class Stage {
 	public ArrayList<Obstacle> getObstacles() {
 		return this.obstacles;
 	}
-
-
+	
+	
+	/*
+	* @Params Shot, Chopper
+	* @Return boolean if shot collides with Chopper 
+	*/
+	
 	public boolean ChopperShotCollition(Shot shot, Chopper chopper) {
 		boolean result = false;
 		if( shot.getX() <= (chopper.getX() + chopper.getImage(0).getIconWidth()) && shot.getX() > chopper.getX() ) {
@@ -80,7 +83,12 @@ public class Stage {
 
 		return result;
 	}
-
+	
+	/*
+	* @Params Shot, Chopper
+	* @Return boolean if shot collides with obstacle (enemy chopper) 
+	*/
+	
 	public boolean Collition(Shot shot,Obstacle obstacle) {
 		boolean result = false;
 		if(shot.getX() >= obstacle.getX() && shot.getX() < (obstacle.getX() + obstacle.getImage(0).getIconWidth())) {

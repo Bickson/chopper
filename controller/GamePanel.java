@@ -48,10 +48,6 @@ public class GamePanel extends JPanel implements ActionListener{
 		frameNumber = 2;
 	}
 
-	public Stage getStage() {
-		return this.level1;
-	}
-
 	public void startAnimation() {
 		timer = new Timer(20, this);
 		timer.start();
@@ -480,7 +476,6 @@ public class GamePanel extends JPanel implements ActionListener{
 */
 	public void stopAnimation() throws IOException {
 		timer.stop();
-		String playername = this.level1.getPlayer().getName();
 		int playerscore = this.level1.getPlayer().getScore();
 		int playerlifelost = this.level1.getPlayer().getLifes() -30;
 		int totalscore = playerscore + (playerlifelost*10);

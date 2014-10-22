@@ -5,18 +5,12 @@ package model;
  */
 public class Player {
 	
-	private String name;
 	private int lifes;
 	private int score;
 	
 	public Player(String name, int lifes) {
-		this.name = name;
 		this.lifes = lifes;
 		this.score = 0;
-	}
-	
-	public String getName() {
-		return this.name;
 	}
 	
 	public int getLifes() {
