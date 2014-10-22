@@ -1,15 +1,14 @@
 package model;
 
-//import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 
+/*
+ * Separate thread that buffer images and unloads background images so not to run out of memory.
+ */
 public class DynamicLoader extends Thread{
-	//private ArrayList<ImageIcon> bgImage = new ArrayList<ImageIcon>();
 	private final int howManyImagesToLoad = 1200;
 	private String tempImagePath;
 	private String imagePath = "gfx/bglevel1/level1Backgorundv9.";
-	//private String imagePath = "gfx/OldLevel1/level1Render";
 	private int currentFrame;
 	private int framesLoaded;
 	private final int buffer = 50;
@@ -93,7 +92,7 @@ public class DynamicLoader extends Thread{
 	}
 
 	/*
-	 * Check if frames needs to be loaded
+	 * Check if frames needs to be loaded and loads if necessary
 	 */
 	private void loadBufferFrames(){
 		//TO DO: Try and catch when loading frames

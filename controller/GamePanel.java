@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import javax.swing.*;
@@ -21,9 +22,15 @@ import main.GameMain;
 import model.*;
 //import model.Chopper;
 
-
+/*
+ * Creates the panel and draws all objects onto it
+ */
 public class GamePanel extends JPanel implements ActionListener{
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private Stage level1 = new Stage();
 	private Timer timer;
 	private Background background = new Background();
@@ -33,7 +40,6 @@ public class GamePanel extends JPanel implements ActionListener{
 	private boolean paused=false;
 	private String filename = "scoreboard.csv";
 	private ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
-
 
 	public GamePanel() {
 		this.setBackground(Color.blue);
@@ -75,21 +81,21 @@ public class GamePanel extends JPanel implements ActionListener{
 		}
 
 	}
-
+/*
+ * Creates the menu used in the game
+ *
+ * @return bar - object JMenuBar
+ *
+ */
 	public JMenuBar createMenu() {
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
-
 		JMenuItem pauseResume = new JMenuItem("Pause/Resume");
 		game.add(pauseResume);
-
 		JMenuItem exit = new JMenuItem("Exit Game");
 		game.add(exit);
-		
 		JMenuItem newgame = new JMenuItem("New Game");
 		game.add(newgame);
-		
-
 		JMenu settings = new JMenu("settings");
 		JMenu dif = new JMenu("Difficulty");
 
@@ -106,15 +112,12 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		// add Listeners
 		exit.addActionListener(new exitHandler());
-		
+
 		newgame.addActionListener(new newGameHandler());
 
 		difEasy.addActionListener(new difficultyEasyHandler());
 
 		pauseResume.addActionListener(new pauseResumeHandler());
-
-
-
 
 		difMedium.addActionListener(new difficultyMediumHandler());
 		difHard.addActionListener(new difficultyHardHandler());
@@ -122,6 +125,23 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		return bar;
 	}
+
+	public void addToScoreBoard(int score){
+		scoreBoard.add(score);
+	}
+
+	private String scoreBoardToString(){
+		String info = new String();
+		int temp = 1;
+		Collections.sort(scoreBoard);
+		//Arrays.sort(scoreBoard);
+		for(int i=scoreBoard.size()-1;i>scoreBoard.size()-11;i--){
+			info += temp + ": " + scoreBoard.get(i) + "\n";
+			temp++;
+		}
+		return info;
+	}
+
 
 	public class pauseResumeHandler implements ActionListener {
 		@Override
@@ -176,7 +196,10 @@ public class GamePanel extends JPanel implements ActionListener{
 			difficulty = 2;
 		}
 	}
-
+/*
+ * Paints all the game elements on the canvas
+ * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+ */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -400,7 +423,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		return difficulty;
 	}
 
-
+	/*
+	 * Handles player key presses.
+	 */
 	private class keyHandler implements KeyListener {
 
 		@Override
@@ -440,7 +465,7 @@ public class GamePanel extends JPanel implements ActionListener{
 					chopper.addShot();
 					chopper.resetShottimer();
 				}
-				
+
 			}
 		}
 
@@ -460,42 +485,45 @@ public class GamePanel extends JPanel implements ActionListener{
 		this.paused = false;
 	}
 
+/*
+* Stops the game and shows the end stats and scoreboard. Also saves the score and writes it to file.
+*/
 	public void stopAnimation() throws IOException {
 		timer.stop();
 		String playername = this.level1.getPlayer().getName();
 		int playerscore = this.level1.getPlayer().getScore();
 		int playerlifelost = this.level1.getPlayer().getLifes() -30;
 		int totalscore = playerscore + (playerlifelost*10);
-		
+
 		scoreBoard = readScoreBoard(filename);
 		addToScoreBoard(totalscore);
-		/*JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " 
+		/*JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: "
 		+ playerlifelost + " (*10)" + "\nTotal score: " + totalscore + "\n"
 		+ "Sore Board: \n" + scoreBoardToString());
 
-		
+
 		writeScoreBoardToFile(filename, scoreBoard);
 		System.exit(0);*/
-		
-		
+
+
 		JFrame frame = new JFrame("GAME END");
 		frame.setSize(170,300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
+
 		JPanel endPanel = new JPanel();
 		endPanel.setFocusable(true);
-		
+
 		JButton exit = new JButton("  Quit  ");
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				System.exit(0);
 			}
 		});
-		
+
 		JButton newgame = new JButton("New Game");
 		newgame.addActionListener(new newGameHandler());
-		
+
 		Object[] columnNames = {"Scoreboard"};
 		Object[][] data = new Object[11][1];
 		int temp = 1;
@@ -505,25 +533,25 @@ public class GamePanel extends JPanel implements ActionListener{
 			Array.set(data[temp], 0,new Integer(scoreBoard.get(i)));
 			temp++;
 		}
-		
+
 		JTable table = new JTable(data,columnNames);
 		table.setShowGrid(true);
-		
+
 		endPanel.add(table);
 		endPanel.add(newgame);
 		endPanel.add(exit);
-		
+
 		frame.add(endPanel);
 		frame.setLocationRelativeTo(this);
-		
+
 		//JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " + playerlifelost + " (*10)" + "\nTotal score: " + totalscore);
 		//System.exit(0);
 	}
-	
+
 	public void addToScoreBoard(int score){
 		scoreBoard.add(score);
 	}
-	
+
 	private String scoreBoardToString(){
 		String info = new String();
 		int temp = 1;
@@ -535,7 +563,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		}
 		return info;
 	}
-	
+
 	public static ArrayList<Integer> readScoreBoard(String filename)
 			throws IOException {
 				//CollectionOfBooks books = new CollectionOfBooks();
@@ -598,6 +626,14 @@ public class GamePanel extends JPanel implements ActionListener{
 			//writer.write(whatToWrite);
 			//	writer.close();
 		}
+
+
+
+
+
+
+
+
 
 
 }

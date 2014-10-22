@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+/*
+ * Represents the player chopper.
+ */
 public class Chopper {
 	
-	//private ImageIcon image = new ImageIcon("gfx/Image001.png");
 	private ArrayList<ImageIcon> images = new ArrayList<ImageIcon>();
 	private int howManyImagesToLoad = 11;
 	private String tempImagePath;
-	//= new ImageIcon("gfx/heliAlpha1.png");
 	private int height,width,x,y;
 	private ArrayList<Shot> shots = new ArrayList<Shot>();
 	private int shotTimer;
@@ -60,7 +61,7 @@ public class Chopper {
 		this.y += i;
 	}
 	
-	//Loads a few of the images:
+	//Loads the images:
 	public void preLoader(){
 		
 		for(int n=1; n<=howManyImagesToLoad;n++){

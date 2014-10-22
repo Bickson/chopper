@@ -4,9 +4,10 @@ import javax.swing.ImageIcon;
 
 import controller.GamePanel;
 
+/*
+ * Represents the shot the player and enemies fire
+ */
 public class Shot extends Obstacle{
-	//private ImageIcon image;
-	//int x,y,width,height;
 	
 	public Shot(int x, int y, int width, int height){
 		super(x,y,width,height);

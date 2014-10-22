@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+/*
+ * Acts as parent class and also for simpler opponents
+ */
 public class Obstacle {
 	
 	protected ImageIcon image;
@@ -18,11 +21,6 @@ public class Obstacle {
 		this.height = height;
 		this.shots = new ArrayList<Shot>();
 	}
-	
-	/* public void setImage();
-	public ImageIcon getImage() {
-		return image;
-	}*/
 	
 	public int getLife() {
 		return 0;

@@ -5,33 +5,33 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import controller.GamePanel;
-
+/*
+ * Represents the enemy Choppers
+ */
 public class EnemyChopper extends Obstacle{
-	//private Shot shot;
-	//private ArrayList<Shot> shots;
-	//To do: Change shot to arrayList
 	private boolean shotFired = false;
 	private ArrayList<ImageIcon> images = new ArrayList<ImageIcon>();
 	private int howManyImagesToLoad = 2;
 	private String tempImagePath;
 	private Chopper chopper;
 	private int targetX, targetY;
-	private int shotTimer; // counts how long ago it fired. So it doenst fire to often when it gets close
+	private int shotTimer; // counts how long ago it fired. So it doesn't fire to often when it gets close
 	private Stage stage;
-	private int life = 3;
-	private static int numOfChoppers = 0; // Not needed, will check if same object
-	private int chopperID = 0;// Not needed, will check if same object
-	private boolean closeToAlly = false;
-	
+	protected int life = 3;
+	private static int numOfChoppers = 0; // For ai to know who it is
+	private int chopperID = 0;				// For ai to know who it is
+	private boolean closeToAlly = false; //To know when to steer clear of ally
+
 	public EnemyChopper(int x, int y, int width, int height, Chopper chopper_, Stage stage_){
 		super(x,y,width,height);
 		preLoader();
 		chopper = chopper_;
 		//shot = new Shot();
 		stage = stage_;
-		chopperID=numOfChoppers;// Not needed, will check if same object
-		numOfChoppers++;// Not needed, will check if same object
+		chopperID=numOfChoppers;
+		numOfChoppers++;
 	}
+
 	@Override
 	public ArrayList<Shot> getShots() {
 		return this.shots;
@@ -44,10 +44,11 @@ public class EnemyChopper extends Obstacle{
 	public int getLife() {
 		return this.life;
 	}
-	
+
 	public void addToLife(int value) {
 		this.life += value;
 	}
+
 
 
 	@Override
@@ -83,9 +84,10 @@ public class EnemyChopper extends Obstacle{
 
 
 
-	
+	/*
+	 * Loads the images that belongs to enemyChopper
+	 */
 	public void preLoader(){
-
 		for(int n=1; n<=howManyImagesToLoad;n++){
 			//First create the string
 			tempImagePath = "gfx/heliAlpha";
@@ -95,7 +97,7 @@ public class EnemyChopper extends Obstacle{
 		}
 
 	}
-	
+
 	/*
 	 * Decides what the AI does
 	 */
@@ -103,10 +105,8 @@ public class EnemyChopper extends Obstacle{
 		if(x<1400)checkIfFiring(index);
 		if(x<1400)checkIfCloseToAlly(index);
 		if(x<1400 && closeToAlly==false)updateCurrentHeading(index);
-		
-
 	}
-	
+
 	/*
 	 * This updates where the chopper is headed
 	 */
@@ -125,50 +125,45 @@ public class EnemyChopper extends Obstacle{
 				}
 		}
 	}
-	
+
 	/*
 	 * Checks if close to an ally and correct course so they stay parallelso there's no overlap and greater fire range
 	 */
 	private void checkIfCloseToAlly(int index){
-		//Check if above:
-		//Also check that no other enemy choppers are in the way:
+
+		//Check that no other enemy choppers are in the way:
 		if(1 == index % 10){
 			for(int i=0; i<stage.getSizeOfObstacles(); i ++){
 				//Check below
-				//&& i != chopperID
-				if((stage.getObstacles(i).getY() + 200 < y + 120 ) && i != chopperID && (stage.getObstacles(i).getX()-160 <= x ) && (stage.getObstacles(i).getX()+160 >= x)){
-				// this != stage.getObstacles(i)
-				//if (stage.getObstacles(i).getY()  + 20 < y +20 && i != chopperID){
-				
+				if((stage.getObstacles(i).getY() + 200 < y + 120 ) && i != chopperID &&
+						(stage.getObstacles(i).getX()-160 <= x ) && (stage.getObstacles(i).getX()+160 >= x)){
 					closeToAlly = true;
 					//System.out.println(i + "DEBUG:  Chopper above! Chopper Id: " + chopperID + "closeToAlly: " + closeToAlly);
 					targetY = y  - 250; // go up!
-					//break;
+					break;
 				}
 				//Check up
-				else if((stage.getObstacles(i).getY() -200  > y- 120 ) && i != chopperID && (stage.getObstacles(i).getX()-160 <= x ) && (stage.getObstacles(i).getX()+160 >= x)){
-				//if(stage.getObstacles(i).getY()  - 20 > y - 20 && i != chopperID){
-					
+				else if((stage.getObstacles(i).getY() -200  > y- 120 ) && i != chopperID &&
+						(stage.getObstacles(i).getX()-160 <= x ) && (stage.getObstacles(i).getX()+160 >= x)){
 					closeToAlly = true;
-					//System.out.println(i + "DEBUG:  Chopper below! Chopper Id: " + chopperID 
+					//System.out.println(i + "DEBUG:  Chopper below! Chopper Id: " + chopperID
 					//		+ "closeToAlly: " + closeToAlly);
 					targetY = y + 250;// go down!
-					
-					//break;
+					break;
 				}
 				else {
 					closeToAlly = false;
 					//System.out.println("DEBUG: Not close Chopper Id: " + chopperID + " closeToAlly: " + closeToAlly);
-					
 				}
 			}
 		}
 
 	}
-/*
- * Checks if the chopper is in within fire range. 
- * Also resets shotFired so it can fire again
- */
+
+	/*
+	 * Checks if the chopper is in within fire range.
+	 * Also resets shotFired so it can fire again
+	 */
 	private void checkIfFiring(int index){
 		//This Checks if the chopper is in within fire range
 		if(chopper.getY() +50 > y && chopper.getY() -50 < y && x < 800){
@@ -188,7 +183,7 @@ public class EnemyChopper extends Obstacle{
 			}
 		}
 	}
-	
-	
+
+
 
 }

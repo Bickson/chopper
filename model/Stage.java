@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+/*
+ * This represents the level that the player first encounters
+ */
 public class Stage {
 
 	private Chopper chopper;
@@ -19,7 +22,7 @@ public class Stage {
 
 		this.player = new Player("Johan", 30);
 
-		//enemyChopper1
+		//Creates the enemyChoppers:
 		obstacles.add(new EnemyChopper(1100,100,50,50, chopper, this));
 		obstacles.add(new EnemyChopper(1100,600,50,50, chopper, this));
 		/*obstacles.add(new EnemyChopper(1150,100,50,50, chopper, this));

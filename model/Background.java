@@ -1,19 +1,15 @@
 package model;
 
-//import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 
+/*
+ * This starts the thread that loads the background images into memory and act as a middle between them.,
+ */
 public class Background extends Thread {
-	//private ArrayList<ImageIcon> bgImage = new ArrayList<ImageIcon>();
 	private int howManyImagesToLoad = 1200;
-	//private String tempImagePath;
-	//private ImageIcon tempImage;
 	private DynamicLoader dynamicLoaderThread;
 
-
 	public Background(){
-		//preLoader();
 		//Create thread.
 		dynamicLoaderThread = new DynamicLoader();
 		//StartThread:
