@@ -126,21 +126,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		return bar;
 	}
 
-	public void addToScoreBoard(int score){
-		scoreBoard.add(score);
-	}
 
-	private String scoreBoardToString(){
-		String info = new String();
-		int temp = 1;
-		Collections.sort(scoreBoard);
-		//Arrays.sort(scoreBoard);
-		for(int i=scoreBoard.size()-1;i>scoreBoard.size()-11;i--){
-			info += temp + ": " + scoreBoard.get(i) + "\n";
-			temp++;
-		}
-		return info;
-	}
 
 
 	public class pauseResumeHandler implements ActionListener {
@@ -496,16 +482,18 @@ public class GamePanel extends JPanel implements ActionListener{
 		int totalscore = playerscore + (playerlifelost*10);
 
 		scoreBoard = readScoreBoard(filename);
+		//System.out.println("totalScore: " + playerscore);
 		addToScoreBoard(totalscore);
 		/*JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: "
 		+ playerlifelost + " (*10)" + "\nTotal score: " + totalscore + "\n"
 		+ "Sore Board: \n" + scoreBoardToString());
 
 
-		writeScoreBoardToFile(filename, scoreBoard);
+		
 		System.exit(0);*/
 
-
+		writeScoreBoardToFile(filename, scoreBoard);
+		
 		JFrame frame = new JFrame("GAME END");
 		frame.setSize(170,300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -548,6 +536,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		//System.exit(0);
 	}
 
+	
+	
+
 	public void addToScoreBoard(int score){
 		scoreBoard.add(score);
 	}
@@ -576,38 +567,18 @@ public class GamePanel extends JPanel implements ActionListener{
 				}
 				catch (IOException e){
 					System.out.println("The file " + filename + " could not be opened");
-					//new String("");
 				}
 
 				//If ok then start reading:
 				BufferedReader reader = new BufferedReader(new FileReader(filename));
 				String line;
-				//int tempScore;
-				//String tempName;
 				while((line = reader.readLine()) != null){
 
 					String[] parts = line.split(",");
-					//String isbn = parts[0];
-					//System.out.println("Debug isbn: " + isbn);
-					//tempName = parts[0];
 					scoreBoard.add(Integer.parseInt(parts[0]));
-					//String title = parts[1];
-					//System.out.println("Debug title: " + title);
-					//int edition = Integer.parseInt(parts[2]);
-					//System.out.println("Debug edition: " + edition);
-					//double price = Double.parseDouble(parts[3]);
-					//System.out.println("Debug price: " + price);
-					//String author = parts[4];
-					//System.out.println("Debug author: " + author);
-					//Book newBook = new Book(isbn,title,edition,price);
-					//Author newAuthor = new Author(author);
-					//newBook.addAuthor(newAuthor);
-					//books.addBook(newBook);
-					//System.out.println("Debug Book: " + newBook + "\n");
 				}
 				reader.close();
 				return scoreBoard;
-				//return books;
 		}
 
 
@@ -621,10 +592,7 @@ public class GamePanel extends JPanel implements ActionListener{
 			BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
 			writer.write(whatToWrite);
 			writer.close();
-			//String whatToWrite = new String(books.toString());
-			//BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-			//writer.write(whatToWrite);
-			//	writer.close();
+
 		}
 
 
