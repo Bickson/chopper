@@ -191,7 +191,8 @@ public class GamePanel extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		//Paint Background
 		//Background
-
+		
+		
 		imageBG = background.getBG(frameNumber);
 		imageBG.paintIcon(this, g, 0, 0);
 
@@ -249,8 +250,9 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		this.paintPlayerStats(g);
 
-
+		
 		frameNumber++;
+		
 	}
 
 	public void paintChopperShots(Graphics g) {
@@ -434,7 +436,13 @@ public class GamePanel extends JPanel implements ActionListener{
 				//Ship.this.y -= 5;
 				//Ship.this.repaint();
 			}
-			if(ke.getKeyCode() == KeyEvent.VK_RIGHT){
+			if(ke.getKeyCode() == KeyEvent.VK_P){
+				if(paused){
+					GamePanel.this.resumeGame();
+				}
+				else {
+					GamePanel.this.pauseGame();
+				}
 				//Ship.this.x += 5;
 				//Ship.this.repaint();
 			}
