@@ -1,7 +1,5 @@
 package model;
 
-//import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 
 /*
@@ -94,7 +92,7 @@ public class DynamicLoader extends Thread{
 	}
 
 	/*
-	 * Check if frames needs to be loaded
+	 * Check if frames needs to be loaded and loads if necessary
 	 */
 	private void loadBufferFrames(){
 		//TO DO: Try and catch when loading frames

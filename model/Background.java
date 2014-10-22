@@ -1,8 +1,7 @@
 package model;
 
-//import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
+
 /*
  * This starts the thread that loads the background images into memory and act as a middle between them.,
  */
