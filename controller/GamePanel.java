@@ -386,13 +386,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		//Player stats
 		Font font1 = new Font("Helvetica", Font.PLAIN, 20);
 		Font font2 = new Font("Helvetica", Font.BOLD, 30);
-		String playername = this.level1.getPlayer().getName();
 		String playerlife = "" + this.level1.getPlayer().getScore();
 		g.setFont(font1);
-		g.drawString("Player: ", 25, 580);
 		g.drawString("Score: ", 25, 610);
-		g.setFont(font2);
-		g.drawString(playername, 100, 580);
 		g.setFont(font2);
 		g.drawString(playerlife, 100, 610);
 
@@ -447,7 +443,7 @@ public class GamePanel extends JPanel implements ActionListener{
 				//Ship.this.repaint();
 			}
 			if(ke.getKeyCode() == KeyEvent.VK_SPACE) {
-				if(chopper.getshotTimer() >= 25){
+				if(chopper.getshotTimer() >= 20){
 					chopper.addShot();
 					chopper.resetShottimer();
 				}
@@ -480,27 +476,46 @@ public class GamePanel extends JPanel implements ActionListener{
 		int playerscore = this.level1.getPlayer().getScore();
 		int playerlifelost = this.level1.getPlayer().getLifes() -30;
 		int totalscore = playerscore + (playerlifelost*10);
-
+		
 		scoreBoard = readScoreBoard(filename);
-		//System.out.println("totalScore: " + playerscore);
-		addToScoreBoard(totalscore);
+		System.out.println("totalScore: " + totalscore);
+		
+		for(int i: scoreBoard) {
+			System.out.println("-"+ i);
+		}
+		
+		scoreBoard.add(totalscore);
+		
+		for(int i: scoreBoard) {
+			System.out.println("--"+ i);
+		}
+		
+		//addToScoreBoard(totalscore);
 		/*JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: "
 		+ playerlifelost + " (*10)" + "\nTotal score: " + totalscore + "\n"
 		+ "Sore Board: \n" + scoreBoardToString());
-
+		
+		for(int i: scoreBoard) {
+			System.out.println
+		}
 
 		
 		System.exit(0);*/
 
+
 		writeScoreBoardToFile(filename, scoreBoard);
 		
 		JFrame frame = new JFrame("GAME END");
-		frame.setSize(170,300);
+		frame.setSize(170,350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
 		JPanel endPanel = new JPanel();
 		endPanel.setFocusable(true);
+		
+		JLabel playerscoresum = new JLabel("Score: " + playerscore);
+		JLabel lifelostsum= new JLabel("Lifelost: " + playerlifelost + "(*10)");
+		JLabel scoresum = new JLabel("Final score: " + totalscore);
 
 		JButton exit = new JButton("  Quit  ");
 		exit.addActionListener(new ActionListener() {
@@ -524,7 +539,10 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		JTable table = new JTable(data,columnNames);
 		table.setShowGrid(true);
-
+		
+		endPanel.add(playerscoresum);
+		endPanel.add(lifelostsum);
+		endPanel.add(scoresum);
 		endPanel.add(table);
 		endPanel.add(newgame);
 		endPanel.add(exit);
