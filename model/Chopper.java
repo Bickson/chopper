@@ -13,8 +13,10 @@ public class Chopper {
 	//= new ImageIcon("gfx/heliAlpha1.png");
 	private int height,width,x,y;
 	private ArrayList<Shot> shots = new ArrayList<Shot>();
+	private int shotTimer;
 	
 	public Chopper() {
+		this.shotTimer = 50;
 		y = 100;
 		preLoader();
 	}
@@ -24,6 +26,18 @@ public class Chopper {
 			index = index % howManyImagesToLoad;
 		}
 		return images.get(index);
+	}
+	
+	public int getshotTimer() {
+		return this.shotTimer;
+	}
+	
+	public void resetShottimer() {
+		this.shotTimer = 0;
+	}
+	
+	public void addToShottimer(int value) {
+		this.shotTimer += value;
 	}
 	
 	public int getX() {
@@ -66,11 +80,7 @@ public class Chopper {
 	public void addShot() {
 		int y = this.getY() + 60; 
 		int x = this.getImage(0).getIconWidth() - 40;
-//<<<<<<< HEAD
 		this.shots.add(new Shot(x,y,20,20,"gfx/heliShot.png"));
-//=======
-		//this.shots.add(new Shot(x,y,35,4,"gfx/shot.png"));
-//>>>>>>> Added a dynamic background image loader.
 	}
 	//Removes the shot
 	public void removeShot(Shot shot) {

@@ -4,8 +4,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.*;
 
@@ -24,6 +31,8 @@ public class GamePanel extends JPanel implements ActionListener{
 	private int frameNumber;
 	private static int difficulty = 0;
 	private boolean paused=false;
+	private String filename = "scoreboard.csv";
+	private ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
 
 
 	public GamePanel() {
@@ -47,11 +56,21 @@ public class GamePanel extends JPanel implements ActionListener{
 		repaint();
 
 		if(this.level1.getPlayer().getLifes() <= 0){
-			this.stopAnimation();
+			try {
+				this.stopAnimation();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if(this.level1.getBoss() != null) {
 			if(this.level1.getBoss().getY() > 680) {
-				this.stopAnimation();
+				try {
+					this.stopAnimation();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 
@@ -175,6 +194,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		Chopper chopper = this.level1.getChopper();
 		chopper.getImage(frameNumber).paintIcon(this,g,chopper.getX(),chopper.getY());
 		this.paintChopperShots(g);
+		chopper.addToShottimer(1);
 		//============================//
 
 
@@ -228,8 +248,6 @@ public class GamePanel extends JPanel implements ActionListener{
 		ArrayList<Shot> shots = this.level1.getChopper().getShots();
 		if(shots.size() != 0) {
 			for(Shot shot: shots) {
-				//g.setColor(Color.red);
-				//g.fillArc(shot.getX(),shot.getY(),shot.getWidth(),shot.getHeight(),90,360);
 				shot.getImage(frameNumber).paintIcon(this,g,shot.getX(),shot.getY());
 				shot.addToX(5);
 				if(shot.getX() > 1024){
@@ -418,7 +436,11 @@ public class GamePanel extends JPanel implements ActionListener{
 				//Ship.this.repaint();
 			}
 			if(ke.getKeyCode() == KeyEvent.VK_SPACE) {
-				chopper.addShot();
+				if(chopper.getshotTimer() >= 25){
+					chopper.addShot();
+					chopper.resetShottimer();
+				}
+				
 			}
 		}
 
@@ -438,15 +460,144 @@ public class GamePanel extends JPanel implements ActionListener{
 		this.paused = false;
 	}
 
-	public void stopAnimation() {
+	public void stopAnimation() throws IOException {
 		timer.stop();
 		String playername = this.level1.getPlayer().getName();
 		int playerscore = this.level1.getPlayer().getScore();
 		int playerlifelost = this.level1.getPlayer().getLifes() -30;
 		int totalscore = playerscore + (playerlifelost*10);
-		JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " + playerlifelost + " (*10)" + "\nTotal score: " + totalscore);
-		System.exit(0);
+		
+		scoreBoard = readScoreBoard(filename);
+		addToScoreBoard(totalscore);
+		/*JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " 
+		+ playerlifelost + " (*10)" + "\nTotal score: " + totalscore + "\n"
+		+ "Sore Board: \n" + scoreBoardToString());
+
+		
+		writeScoreBoardToFile(filename, scoreBoard);
+		System.exit(0);*/
+		
+		
+		JFrame frame = new JFrame("GAME END");
+		frame.setSize(170,300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		
+		JPanel endPanel = new JPanel();
+		endPanel.setFocusable(true);
+		
+		JButton exit = new JButton("  Quit  ");
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				System.exit(0);
+			}
+		});
+		
+		JButton newgame = new JButton("New Game");
+		newgame.addActionListener(new newGameHandler());
+		
+		Object[] columnNames = {"Scoreboard"};
+		Object[][] data = new Object[11][1];
+		int temp = 1;
+		//for(int i=0;i<scoreBoard.size();i++) {
+		data[0][0] = "Scoreboard";
+		for(int i=scoreBoard.size()-1;i>scoreBoard.size()-11;i--){
+			Array.set(data[temp], 0,new Integer(scoreBoard.get(i)));
+			temp++;
+		}
+		
+		JTable table = new JTable(data,columnNames);
+		table.setShowGrid(true);
+		
+		endPanel.add(table);
+		endPanel.add(newgame);
+		endPanel.add(exit);
+		
+		frame.add(endPanel);
+		frame.setLocationRelativeTo(this);
+		
+		//JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " + playerlifelost + " (*10)" + "\nTotal score: " + totalscore);
+		//System.exit(0);
 	}
+	
+	public void addToScoreBoard(int score){
+		scoreBoard.add(score);
+	}
+	
+	private String scoreBoardToString(){
+		String info = new String();
+		int temp = 1;
+		Collections.sort(scoreBoard);
+		//Arrays.sort(scoreBoard);
+		for(int i=scoreBoard.size()-1;i>scoreBoard.size()-11;i--){
+			info += temp + ": " + scoreBoard.get(i) + "\n";
+			temp++;
+		}
+		return info;
+	}
+	
+	public static ArrayList<Integer> readScoreBoard(String filename)
+			throws IOException {
+				//CollectionOfBooks books = new CollectionOfBooks();
+				ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
+				//Error handling:
+				// Tries to open file, if unsuccessful returns an empty object.
+				try{
+					FileReader reader = new FileReader(filename);
+					reader.close();
+				}
+				catch (IOException e){
+					System.out.println("The file " + filename + " could not be opened");
+					//new String("");
+				}
+
+				//If ok then start reading:
+				BufferedReader reader = new BufferedReader(new FileReader(filename));
+				String line;
+				//int tempScore;
+				//String tempName;
+				while((line = reader.readLine()) != null){
+
+					String[] parts = line.split(",");
+					//String isbn = parts[0];
+					//System.out.println("Debug isbn: " + isbn);
+					//tempName = parts[0];
+					scoreBoard.add(Integer.parseInt(parts[0]));
+					//String title = parts[1];
+					//System.out.println("Debug title: " + title);
+					//int edition = Integer.parseInt(parts[2]);
+					//System.out.println("Debug edition: " + edition);
+					//double price = Double.parseDouble(parts[3]);
+					//System.out.println("Debug price: " + price);
+					//String author = parts[4];
+					//System.out.println("Debug author: " + author);
+					//Book newBook = new Book(isbn,title,edition,price);
+					//Author newAuthor = new Author(author);
+					//newBook.addAuthor(newAuthor);
+					//books.addBook(newBook);
+					//System.out.println("Debug Book: " + newBook + "\n");
+				}
+				reader.close();
+				return scoreBoard;
+				//return books;
+		}
+
+
+		public static void writeScoreBoardToFile(String filename, ArrayList<Integer> scoreBoard)
+			throws FileNotFoundException, IOException {
+			String whatToWrite = new String();
+			Collections.sort(scoreBoard);
+			for(int i=0; i<scoreBoard.size();i++){
+				whatToWrite += scoreBoard.get(i) + ", \n";
+			}
+			BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+			writer.write(whatToWrite);
+			writer.close();
+			//String whatToWrite = new String(books.toString());
+			//BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+			//writer.write(whatToWrite);
+			//	writer.close();
+		}
 
 
 }

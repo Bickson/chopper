@@ -1,5 +1,6 @@
 package view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
@@ -12,7 +13,10 @@ public class GFXInterface {
 	}
 	
 	public void run() {
+		
 		JFrame frame = new JFrame("Chopper");
+		frame.setIconImage(new ImageIcon("gfx/chopperFrames/helli.1.png").getImage());
+		
 		GamePanel panel = new GamePanel();
 		
 		frame.add(panel);
