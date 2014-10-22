@@ -4,6 +4,9 @@ import java.awt.*;
 
 import javax.swing.ImageIcon;
 
+/*
+ * Acts as parent class and also for simpler opponents
+ */
 public class Obstacle {
 	
 	protected ImageIcon image;
@@ -15,11 +18,6 @@ public class Obstacle {
 		this.width = width;
 		this.height = height;
 	}
-	
-	/* public void setImage();
-	public ImageIcon getImage() {
-		return image;
-	}*/
 	
 	public int getLife() {
 		return 0;

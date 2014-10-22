@@ -4,8 +4,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import javax.swing.*;
 
@@ -14,9 +21,15 @@ import main.GameMain;
 import model.*;
 //import model.Chopper;
 
-
+/*
+ * Creates the panel and draws all objects onto it
+ */
 public class GamePanel extends JPanel implements ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Stage level1 = new Stage();
 	private Timer timer;
 	private Background background = new Background();
@@ -24,7 +37,8 @@ public class GamePanel extends JPanel implements ActionListener{
 	private int frameNumber;
 	private static int difficulty = 0;
 	private boolean paused=false;
-
+	private String filename = "scoreboard.csv";
+	private ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
 
 	public GamePanel() {
 		this.setBackground(Color.blue);
@@ -47,30 +61,43 @@ public class GamePanel extends JPanel implements ActionListener{
 		repaint();
 
 		if(this.level1.getPlayer().getLifes() <= 0){
-			this.stopAnimation();
+			try {
+				this.stopAnimation();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if(this.level1.getBoss() != null) {
 			if(this.level1.getBoss().getY() > 680) {
-				this.stopAnimation();
+				try {
+					this.stopAnimation();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 
 	}
-
+/*
+ * Creates the menu used in the game
+ * 
+ * @return bar - object JMenuBar
+ *
+ */
 	public JMenuBar createMenu() {
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
-
 		JMenuItem pauseResume = new JMenuItem("Pause/Resume");
 		game.add(pauseResume);
-
 		JMenuItem exit = new JMenuItem("Exit Game");
 		game.add(exit);
-		
 		JMenuItem newgame = new JMenuItem("New Game");
 		game.add(newgame);
-		
-
 		JMenu settings = new JMenu("settings");
 		JMenu dif = new JMenu("Difficulty");
 
@@ -94,16 +121,30 @@ public class GamePanel extends JPanel implements ActionListener{
 
 		pauseResume.addActionListener(new pauseResumeHandler());
 
-
-
-
 		difMedium.addActionListener(new difficultyMediumHandler());
 		difHard.addActionListener(new difficultyHardHandler());
 
 
 		return bar;
 	}
+	
+	public void addToScoreBoard(int score){
+		scoreBoard.add(score);
+	}
+	
+	private String scoreBoardToString(){
+		String info = new String();
+		int temp = 1;
+		Collections.sort(scoreBoard);
+		//Arrays.sort(scoreBoard);
+		for(int i=scoreBoard.size()-1;i>scoreBoard.size()-11;i--){
+			info += temp + ": " + scoreBoard.get(i) + "\n";
+			temp++;
+		}
+		return info;
+	}
 
+	
 	public class pauseResumeHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -157,7 +198,10 @@ public class GamePanel extends JPanel implements ActionListener{
 			difficulty = 2;
 		}
 	}
-
+/*
+ * Paints all the game elements on the canvas
+ * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+ */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -360,8 +404,10 @@ public class GamePanel extends JPanel implements ActionListener{
 	public static int getDifficulty(){
 		return difficulty;
 	}
-
-
+	
+	/*
+	 * Handles player key presses.
+	 */
 	private class keyHandler implements KeyListener {
 
 		@Override
@@ -417,15 +463,73 @@ public class GamePanel extends JPanel implements ActionListener{
 		this.paused = false;
 	}
 
-	public void stopAnimation() {
+	/*
+	 * Stops the game and shows the end stats and scoreboard. Also saves the score and writes it to file.
+	 */
+	public void stopAnimation() throws FileNotFoundException, IOException {
 		timer.stop();
 		String playername = this.level1.getPlayer().getName();
 		int playerscore = this.level1.getPlayer().getScore();
 		int playerlifelost = this.level1.getPlayer().getLifes() -30;
 		int totalscore = playerscore + (playerlifelost*10);
-		JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " + playerlifelost + " (*10)" + "\nTotal score: " + totalscore);
+		scoreBoard = readScoreBoard(filename);
+		addToScoreBoard(totalscore);
+		JOptionPane.showMessageDialog(this, "Player: " + playername + "\nScore: "+ playerscore + "\nLifelost: " 
+		+ playerlifelost + " (*10)" + "\nTotal score: " + totalscore + "\n"
+		+ "Sore Board: \n" + scoreBoardToString());
+		writeScoreBoardToFile(filename, scoreBoard);
 		System.exit(0);
+	}
+	
+	
+	/*
+	 * Reads the scoreBoard from file.
+	 */
+	public static ArrayList<Integer> readScoreBoard(String filename)
+			throws IOException {
+			//CollectionOfBooks books = new CollectionOfBooks();
+			ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
+			//Error handling:
+			// Tries to open file, if unsuccessful returns an empty object.
+			try{
+				FileReader reader = new FileReader(filename);
+				reader.close();
+			}
+			catch (IOException e){
+				System.out.println("The file " + filename + " could not be opened");
+			}
+
+			//If ok then start reading:
+			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			String line;
+			while((line = reader.readLine()) != null){
+				String[] parts = line.split(",");
+				scoreBoard.add(Integer.parseInt(parts[0]));
+			}
+			reader.close();
+			return scoreBoard;
 	}
 
 
+	public static void writeScoreBoardToFile(String filename, ArrayList<Integer> scoreBoard)
+		throws FileNotFoundException, IOException {
+		String whatToWrite = new String();
+		Collections.sort(scoreBoard);
+		for(int i=0; i<scoreBoard.size();i++){
+			whatToWrite += scoreBoard.get(i) + ", \n";
+		}
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+		writer.write(whatToWrite);
+		writer.close();
+
+	}
+
+		
+		
+		
+		
+		
+		
+		
+		
 }

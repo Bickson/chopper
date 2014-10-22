@@ -1,5 +1,8 @@
 package model;
 
+/*
+ * Represents the player and his stats
+ */
 public class Player {
 	
 	private String name;
